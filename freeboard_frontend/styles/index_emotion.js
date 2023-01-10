@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Button } from "antd";
 
 export const Signup = styled.div`
   font-size: 36px;
@@ -35,9 +36,13 @@ export const NamePassword = styled.div`
 export const Name = styled.div`
   width: 100%;
   margin-right: 50px;
+  display: flex;
+  flex-direction: column;
 `;
 export const Password = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 export const SignTitle = styled.div`
   font-size: 16px;
@@ -69,7 +74,7 @@ export const MyInputBody = styled.input`
   border: 1px solid #bdbdbd;
   padding-left: 10px;
 `;
-export const Search = styled.div`
+export const Search = styled.button`
   background-color: black;
   color: white;
   width: 124px;
@@ -115,8 +120,7 @@ export const MainSetting = styled.div`
   flex-direction: row;
 `;
 export const RadioInput = styled.input``;
-export const Sign = styled.div``;
-export const SignButton = styled.div`
+export const SignButton = styled.button`
   background-color: #ffd600;
   width: 179px;
   height: 52px;
@@ -124,4 +128,10 @@ export const SignButton = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+export const ErrorText = styled.div`
+  color: red;
+  text-align: left;
+  width: 100%;
 `;
