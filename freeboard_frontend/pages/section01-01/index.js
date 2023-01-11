@@ -34,37 +34,49 @@ export default function EmotionPage() {
   function onChangeName(event) {
     const value = event.target.value;
     setName(value);
+    if (value !== "") {
+      setNameError("");
+    }
   }
   function onChangePassword(event) {
     const value = event.target.value;
     setPassword(value);
+    if (value !== "") {
+      setPasswordError("");
+    }
   }
   function onChangeTitle(event) {
     const value = event.target.value;
     setTitle(value);
+    if (value !== "") {
+      setTitleError("");
+    }
   }
   function onChangeBody(event) {
     const value = event.target.value;
     setBody(value);
+    if (value !== "") {
+      setBodyError("");
+    }
   }
 
-  function onClickSignup(event) {
-    if (name === "") {
+  function onClickSignup() {
+    if (!name) {
       setNameError("이름을 입력해주세요.");
     } else {
       setNameError("");
     }
-    if (password === "") {
+    if (!password) {
       setPasswordError("비밀번호를 입력해주세요.");
     } else {
       setPasswordError("");
     }
-    if (title === "") {
+    if (!title) {
       setTitleError("제목을 입력해주세요.");
     } else {
       setTitleError("");
     }
-    if (body === "") {
+    if (!body) {
       setBodyError("내용을 입력해주세요.");
     } else {
       setBodyError("");
