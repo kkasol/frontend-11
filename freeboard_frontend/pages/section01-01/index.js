@@ -14,12 +14,23 @@ import {
   Search,
   MyInputMini,
   PostSearch,
+  AddressInput,
   Square3,
   MainSetting,
   RadioInput,
   SignButton,
   ErrorText,
 } from "../../styles/index_emotion";
+import { useMutation, gql } from "@apollo/client";
+const CREATE_BOARD = gql`
+  mutation createBoard($writer: String, $title: String, $contents: String) {
+    createBoard(writer: $writer, title: $title, contents: $contents) {
+      _id
+      number
+      message
+    }
+  }
+`;
 
 export default function EmotionPage() {
   const [name, setName] = useState("");
@@ -30,6 +41,7 @@ export default function EmotionPage() {
   const [passwordError, setPasswordError] = useState("");
   const [titleError, setTitleError] = useState("");
   const [bodyError, setBodyError] = useState("");
+  const [createBoard] = useMutation(CREATE_BOARD);
 
   function onChangeName(event) {
     const value = event.target.value;
@@ -60,7 +72,7 @@ export default function EmotionPage() {
     }
   }
 
-  function onClickSignup() {
+  const onClickSignup = async () => {
     if (!name) {
       setNameError("이름을 입력해주세요.");
     } else {
@@ -81,7 +93,18 @@ export default function EmotionPage() {
     } else {
       setBodyError("");
     }
-  }
+    {
+      const result = await createBoard({
+        variables: {
+          writer: name,
+          title: title,
+          contents: body,
+        },
+      });
+      console.log(result);
+    }
+  };
+
   //여기는 자바스크립트 쓰는 곳
 
   return (
@@ -121,7 +144,7 @@ export default function EmotionPage() {
       <SignTitle>내용</SignTitle>
       <MyInputBody
         input
-        type="text"
+        type="textarea"
         placeholder="내용을 작성해주세요."
         onChange={onChangeBody}
       />
@@ -129,10 +152,10 @@ export default function EmotionPage() {
       <SignTitle>주소</SignTitle>
       <PostSearch>
         <MyInputMini input type="text" placeholder="07250" />
-        <Search>우편번호 검색</Search>
+        <Search type="button">우편번호 검색</Search>
       </PostSearch>
-      <MyInput input type="text" />
-      <MyInput input type="text" />
+      <AddressInput input type="text" />
+      <AddressInput input type="text" />
       <SignTitle>유튜브</SignTitle>
       <MyInput input type="text" placeholder="링크를 복사해주세요." />
       <SignTitle>사진 첨부</SignTitle>
@@ -152,12 +175,11 @@ export default function EmotionPage() {
       </Square3>
       <SignTitle>메인 설정</SignTitle>
       <MainSetting>
-        <RadioInput input type="radio" name="youtube" />
+        <RadioInput input type="radio" name="Radio-button" />
         유튜브
-        <RadioInput input type="radio" name="youtube" />
+        <RadioInput input type="radio" name="Radio-button" />
         사진
       </MainSetting>
-
       <SignButton onClick={onClickSignup}>등록하기</SignButton>
     </Wrapper>
   );

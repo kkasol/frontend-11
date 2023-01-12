@@ -21,7 +21,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid gray;
-  box-shadow: 0px 4px 0.2 gray;
+  box-shadow: 0px 0px 10px gray;
   width: 1200px;
   height: 100%;
   padding: 50px;
@@ -31,6 +31,7 @@ export const NamePassword = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
+  heigh: 100%;
 `;
 
 export const Name = styled.div`
@@ -44,6 +45,7 @@ export const Password = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 export const SignTitle = styled.div`
   font-size: 16px;
   font-weight: 500;
@@ -60,21 +62,20 @@ export const NpInput = styled.input`
 export const MyInput = styled.input`
   width: 100%;
   height: 52px;
-  margin-bottom: 25px;
   border: 1px solid #bdbdbd;
   padding-left: 10px;
 `;
-export const MyInputBody = styled.input`
+export const MyInputBody = styled.textarea`
   width: 100%;
-  height: 480px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  height: 500px;
   border: 1px solid #bdbdbd;
-  padding-left: 10px;
+  padding: 20px 20px 0px 20px;
+  resize: none;
 `;
 export const Search = styled.button`
+  :hover {
+    cursor: pointer;
+  }
   background-color: black;
   color: white;
   width: 124px;
@@ -89,7 +90,16 @@ export const MyInputMini = styled.input`
   margin-right: 15px;
   text-align: center;
   font-size: 16px;
+  border: 1px solid #bdbdbd;
 `;
+
+export const AddressInput = styled.input`
+  width: 100%;
+  height: 52px;
+  margin-bottom: 10px;
+  border: 1px solid #bdbdbd;
+`;
+
 export const Square3 = styled.div`
   display: flex;
   flex-direction: row;
@@ -121,6 +131,12 @@ export const MainSetting = styled.div`
 `;
 export const RadioInput = styled.input``;
 export const SignButton = styled.button`
+  :hover {
+    cursor: pointer;
+  }
+  :active {
+    border: 3px solid black;
+  }
   background-color: #ffd600;
   width: 179px;
   height: 52px;
@@ -134,4 +150,5 @@ export const ErrorText = styled.div`
   color: red;
   text-align: left;
   width: 100%;
+  height: 30px;
 `;
