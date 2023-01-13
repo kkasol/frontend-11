@@ -22,12 +22,11 @@ import {
   ErrorText,
 } from "../../styles/index_emotion";
 import { useMutation, gql } from "@apollo/client";
+import { useRouter } from "next/router";
 const CREATE_BOARD = gql`
-  mutation createBoard($writer: String, $title: String, $contents: String) {
-    createBoard(writer: $writer, title: $title, contents: $contents) {
+  mutation createBoard($createBoardInput: CreateBoardInput!) {
+    createBoard(createBoardInput: $createBoardInput) {
       _id
-      number
-      message
     }
   }
 `;
@@ -42,6 +41,7 @@ export default function EmotionPage() {
   const [titleError, setTitleError] = useState("");
   const [bodyError, setBodyError] = useState("");
   const [createBoard] = useMutation(CREATE_BOARD);
+  const router = useRouter();
 
   function onChangeName(event) {
     const value = event.target.value;
@@ -93,15 +93,21 @@ export default function EmotionPage() {
     } else {
       setBodyError("");
     }
-    {
+    try {
       const result = await createBoard({
         variables: {
-          writer: name,
-          title: title,
-          contents: body,
+          createBoardInput: {
+            writer: name,
+            password: password,
+            title: title,
+            contents: body,
+          },
         },
       });
       console.log(result);
+      router.push(`/section01-01-moved/${result.data.createBoard._id}`);
+    } catch (error) {
+      alert(error.message);
     }
   };
 

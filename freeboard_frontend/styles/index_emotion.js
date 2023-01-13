@@ -31,7 +31,7 @@ export const NamePassword = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  heigh: 100%;
+  height: 100%;
 `;
 
 export const Name = styled.div`
