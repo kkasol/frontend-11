@@ -32,6 +32,7 @@ export const NamePassword = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  margin-right: 10px;
 `;
 
 export const Name = styled.div`
@@ -58,23 +59,29 @@ export const NpInput = styled.input`
   height: 52px;
   border: 1px solid #bdbdbd;
   padding-left: 10px;
+  font-size: 16px;
 `;
 export const MyInput = styled.input`
   width: 100%;
   height: 52px;
   border: 1px solid #bdbdbd;
   padding-left: 10px;
+  font-size: 16px;
 `;
 export const MyInputBody = styled.textarea`
-  width: 100%;
+  width: 98%;
   height: 500px;
   border: 1px solid #bdbdbd;
   padding: 20px 20px 0px 20px;
   resize: none;
+  font-size: 16px;
 `;
 export const Search = styled.button`
   :hover {
     cursor: pointer;
+  }
+  :active {
+    background-color: gray;
   }
   background-color: black;
   color: white;
@@ -84,6 +91,7 @@ export const Search = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  font-size: 16px;
 `;
 export const MyInputMini = styled.input`
   width: 77px;
@@ -98,12 +106,14 @@ export const AddressInput = styled.input`
   height: 52px;
   margin-bottom: 10px;
   border: 1px solid #bdbdbd;
+  font-size: 16px;
 `;
 
 export const Square3 = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+  font-size: 16px;
 `;
 export const Square = styled.div`
   background-color: #bdbdbd;
@@ -123,13 +133,40 @@ export const PostSearch = styled.div`
   width: 100%;
   justify-content: flex-start;
   margin-bottom: 15px;
+  margin-right: 7px;
 `;
 export const MainSetting = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
-export const RadioInput = styled.input``;
+export const RadioCircle = styled.div`
+  border: 1px solid black;
+`;
+export const RadioYoutubeSection = styled.div`
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+export const RadioPictureSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+export const RadioYoutube = styled.input`
+  accent-color: blue;
+  width: 18px;
+  height: 18px;
+  margin-right: 7px;
+`;
+export const RadioPicture = styled.input`
+  accent-color: blue;
+  width: 18px;
+  height: 18px;
+  margin-right: 7px;
+`;
 export const SignButton = styled.button`
   :hover {
     cursor: pointer;
@@ -144,6 +181,7 @@ export const SignButton = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 16px;
 `;
 
 export const ErrorText = styled.div`

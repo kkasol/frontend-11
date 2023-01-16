@@ -31,7 +31,7 @@ export const WriterImage = styled.img`
 export const WriteDate = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: -700px;
+  margin-left: -640px;
 `;
 export const Writer = styled.div`
   font-size: 24px;
