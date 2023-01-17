@@ -54,7 +54,6 @@ import {
 } from "./BoardFinish.styles";
 
 export default function BoardFinishUI(props) {
-  console.log(props);
   return (
     <div>
       <Total>

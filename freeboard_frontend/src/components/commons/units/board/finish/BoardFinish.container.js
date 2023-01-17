@@ -10,11 +10,6 @@ export default function BoardFinish() {
       boardId: router.query.id,
     },
   });
-  // console.log(data.fetchBoard.createdAt);
-  // function dataCut() {
-  //   const dataCreated = data.fetchBoard.createdAt;
-  //   console.log(dataCreated);
-  // }
   return (
     <BoardFinishUI
       writer={data?.fetchBoard.writer}
