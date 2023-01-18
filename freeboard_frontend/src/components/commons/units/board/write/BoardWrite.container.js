@@ -17,7 +17,7 @@ export default function BoardWrite() {
   const router = useRouter();
   const [addresscode, setAddressCode] = useState();
   const [address, setAddress] = useState();
-  const [addressdetail, setAddressDetail] = useState();
+  const [addressDetail, setAddressDetail] = useState();
 
   function onChangeName(event) {
     const value = event.target.value;
@@ -88,13 +88,13 @@ export default function BoardWrite() {
         variables: {
           createBoardInput: {
             writer: name,
-            password: password,
-            title: title,
+            password,
+            title,
             contents: body,
             boardAddress: {
               zipcode: addresscode,
-              address: address,
-              addressDetail: addressdetail,
+              address,
+              addressDetail,
             },
           },
         },
