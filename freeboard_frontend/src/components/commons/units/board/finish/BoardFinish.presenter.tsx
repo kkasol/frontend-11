@@ -1,5 +1,5 @@
 import * as st from "./BoardFinish.styles";
-import { ChangeEvent, MouseEventHandler, ChangeEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import { IQuery } from "../../../../../commons/types/generated/types";
 interface IProps {
   el: any;
@@ -10,15 +10,11 @@ interface IProps {
   contents: string;
   likeCount: any;
   dislikeCount: any;
+  onClickLike: () => void;
+  onClickDislike: () => void;
   onClickToList: MouseEventHandler<HTMLButtonElement>;
   onClickEdit: MouseEventHandler<HTMLButtonElement>;
   onClickDelete: MouseEventHandler<HTMLButtonElement>;
-  onChangeCommentWriter: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeCommentPassword: (event: ChangeEvent<HTMLInputElement>) => void;
-  onChangeCommentContents: ChangeEventHandler<HTMLTextAreaElement>;
-
-  onClickCommentSignUP: MouseEventHandler<HTMLButtonElement>;
-  onClickCommentDelete: MouseEventHandler<HTMLButtonElement>;
 }
 export default function BoardFinishUI(props: IProps) {
   return (
@@ -46,17 +42,28 @@ export default function BoardFinishUI(props: IProps) {
                 {/* {data?.fetchBoard.image} */}
               </st.ContentsImage>
               <st.ContentsText>{props.contents}</st.ContentsText>
-              <st.ContentsYoutube src="/video.png">
-                {/* {data?.fetchBoard.youtubeUrl} */}
+              <st.ContentsYoutube>
+                <YouTube
+                  videoId="2g811Eo7K8U"
+                  opts={opts}
+                  onReady={onPlayerReady}
+                />
+                ;{/* {data?.fetchBoard.youtubeUrl} */}
               </st.ContentsYoutube>
             </st.ContentsBody>
             <st.LikeDislike>
               <st.Like>
-                <st.LikeIcon src="/like.png"></st.LikeIcon>
+                <st.LikeIcon
+                  src="/like.png"
+                  onClick={props.onClickLike}
+                ></st.LikeIcon>
                 <div>{props.likeCount}</div>
               </st.Like>
               <st.Dislike>
-                <st.DislikeIcon src="/dislike.png"></st.DislikeIcon>
+                <st.DislikeIcon
+                  src="/dislike.png"
+                  onClick={props.onClickDislike}
+                ></st.DislikeIcon>
                 <div>{props.dislikeCount}</div>
               </st.Dislike>
             </st.LikeDislike>

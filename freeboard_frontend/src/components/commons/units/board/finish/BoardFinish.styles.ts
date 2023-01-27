@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import YouTube from "react-youtube";
 export const Total = styled.div`
   width: 1200px;
   height: 100%;
@@ -88,7 +89,7 @@ export const ContentsText = styled.div`
   margin-bottom: 30px;
   margin-top: 20px;
 `;
-export const ContentsYoutube = styled.img`
+export const ContentsYoutube = styled.div`
   width: 486px;
   height: 240px;
   display: flex;
@@ -108,18 +109,28 @@ export const LikeDislike = styled.div`
   align-items: center;
   margin-top: 150px;
 `;
-export const LikeIcon = styled.img``;
+export const LikeIcon = styled.img`
+  :hover {
+    cursor: pointer;
+  }
+`;
 export const Like = styled.div`
   display: flex;
   flex-direction: column;
   color: #ffd600;
   margin-right: 50px;
+  font-size: 18px;
 `;
-export const DislikeIcon = styled.img``;
+export const DislikeIcon = styled.img`
+  :hover {
+    cursor: pointer;
+  }
+`;
 export const Dislike = styled.div`
   display: flex;
   flex-direction: column;
   color: #828282;
+  font-size: 18px;
 `;
 export const MiddleButton = styled.div`
   width: 100%;
@@ -173,3 +184,5 @@ export const ToDelete = styled.button`
   font-size: 16px;
   font-weight: 500;
 `;
+
+export const YouTube = styled.div``;
