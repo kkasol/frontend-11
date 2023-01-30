@@ -21,6 +21,7 @@ export default function BoardComment() {
   const [commentPassword, setCommentPassword] = useState("");
   const [commentContents, setCommentContents] = useState("");
   const [commentRating, setCommentRating] = useState(5);
+  const [rating, setRating] = useState();
 
   const [createBoardComment] = useMutation(CREATE_BOARD_COMMENT);
   const [deleteBoardComment] = useMutation<
@@ -36,7 +37,9 @@ export default function BoardComment() {
       boardId: `${router.query.id}`,
     },
   });
-
+  const onChangeRate = (event: ChangeEvent<HTMLElement>) => {
+    setRating(event);
+  };
   function onChangeCommentWriter(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     setCommentWriter(value);
@@ -59,7 +62,7 @@ export default function BoardComment() {
             writer: commentWriter,
             password: commentPassword,
             contents: commentContents,
-            rating: commentRating,
+            rating,
           },
           boardId: router.query.id,
         },
@@ -96,6 +99,8 @@ export default function BoardComment() {
   };
   return (
     <BoardCommentUI
+      rating={rating}
+      onChangeRate={onChangeRate}
       onChangeCommentWriter={onChangeCommentWriter}
       onChangeCommentPassword={onChangeCommentPassword}
       onChangeCommentContents={onChangeCommentContents}

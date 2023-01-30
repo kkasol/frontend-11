@@ -81,6 +81,7 @@ export default function BoardFinish() {
         onClickDelete={onClickDelete}
         onClickToList={onClickToList}
         onClickEdit={onClickEdit}
+        data={data}
       />
       <BoardComment />
     </>

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import YouTube from "react-youtube";
+import ReactPlayer from "react-player";
+
 export const Total = styled.div`
   width: 1200px;
   height: 100%;
@@ -84,7 +85,6 @@ export const ContentsImage = styled.img`
   text-align: center;
 `;
 export const ContentsText = styled.div`
-  width: 100%;
   height: 100%;
   margin-bottom: 30px;
   margin-top: 20px;
@@ -99,6 +99,10 @@ export const ContentsYoutube = styled.div`
   text-align: center;
   margin-top: 150px;
 `;
+export const Youtube = styled(ReactPlayer)`
+  margin: auto;
+`;
+
 export const LikeDislike = styled.div`
   width: 100%;
   height: 100%;

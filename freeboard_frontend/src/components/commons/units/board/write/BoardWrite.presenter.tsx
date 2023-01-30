@@ -1,6 +1,37 @@
+import { ChangeEvent, ChangeEventHandler } from "react";
 import * as st from "./BoardWrite.styles";
+import { Modal } from "antd";
+import DaumPostcodeEmbed from "react-daum-postcode";
+interface IBoardWriteProps {
+  onChangeName: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangePassword: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeBody: ChangeEventHandler<HTMLTextAreaElement>;
+  onChangeYoutubeUrl: (event: ChangeEvent<HTMLInputElement>) => void;
 
-export default function BoardWriteUI(props: any) {
+  onChangeAddressCode: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeAddress: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeAddressDetail: (event: ChangeEvent<HTMLInputElement>) => void;
+  nameError: string;
+  passwordError: string;
+  titleError: string;
+  bodyError: string;
+  data: any;
+  isEdit: boolean;
+  isActive: boolean;
+  onClickEdit: () => void;
+  showAddressModal: () => void;
+  onClickSignUp: () => void;
+  isModalOpen: boolean;
+  zipcode: string;
+
+  handleComplete: () => void;
+  zipscode?: string | undefined;
+  address?: string | undefined;
+  addressDetail?: string | undefined;
+}
+
+export default function BoardWriteUI(props: IBoardWriteProps) {
   return (
     <st.Wrapper>
       <st.SignUp>게시물 {props.isEdit ? "수정" : "등록"}</st.SignUp>
@@ -12,6 +43,7 @@ export default function BoardWriteUI(props: any) {
             placeholder="이름을 적어주세요."
             onChange={props.onChangeName}
             defaultValue={props.data?.fetchBoard?.writer}
+            readOnly={Boolean(props.data?.fetchBoard.writer)}
           />
           <st.ErrorText>{props.nameError}</st.ErrorText>
         </st.Name>
@@ -45,24 +77,28 @@ export default function BoardWriteUI(props: any) {
       <st.PostSearch>
         <st.MyInputMini
           type="text"
-          onChange={props.onChangeAddressCode}
-          defaultValue={props.data?.fetchBoard.addresscode}
+          readOnly
           placeholder="07250"
+          value={props.zipcode}
         />
-        <st.Search type="button">우편번호 검색</st.Search>
+
+        <st.Search type="button" onClick={props.showAddressModal}>
+          우편번호 검색
+        </st.Search>
+        {props.isModalOpen && (
+          <Modal title="주소 검색" open={true}>
+            <DaumPostcodeEmbed onComplete={props.handleComplete} />
+          </Modal>
+        )}
       </st.PostSearch>
-      <st.AddressInput
-        type="text"
-        onChange={props.onChangeAddress}
-        defaultValue={props.data?.fetchBoard.address}
-      />
-      <st.AddressInput
-        type="text"
-        onChange={props.onChangeAddressDetail}
-        defaultValue={props.data?.fetchBoard.addressDetail}
-      />
+      <st.AddressInput type="text" readOnly value={props.address} />
+      <st.AddressInput type="text" onChange={props.onChangeAddressDetail} />
       <st.SignTitle>유튜브</st.SignTitle>
-      <st.MyInput type="text" placeholder="링크를 복사해주세요." />
+      <st.Youtube
+        placeholder="링크를 복사해주세요."
+        onChange={props.onChangeYoutubeUrl}
+        defaultValue={props.data?.fetchBoard.youtubeUrl}
+      />
       <st.SignTitle>사진 첨부</st.SignTitle>
       <st.Square3>
         <st.Square>

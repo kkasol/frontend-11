@@ -4,10 +4,10 @@ import { IQuery } from "../../../../../commons/types/generated/types";
 interface IProps {
   el: any;
   commentData: Pick<IQuery, "fetchBoardComments"> | undefined;
-  writer: string;
+  writer?: string;
   createdAt: string;
-  title: string;
-  contents: string;
+  title?: string;
+  contents?: string;
   likeCount: any;
   dislikeCount: any;
   onClickLike: () => void;
@@ -15,6 +15,7 @@ interface IProps {
   onClickToList: MouseEventHandler<HTMLButtonElement>;
   onClickEdit: MouseEventHandler<HTMLButtonElement>;
   onClickDelete: MouseEventHandler<HTMLButtonElement>;
+  // data?: Pick<IQuery, "fetchBoard">;
 }
 export default function BoardFinishUI(props: IProps) {
   return (
@@ -43,12 +44,13 @@ export default function BoardFinishUI(props: IProps) {
               </st.ContentsImage>
               <st.ContentsText>{props.contents}</st.ContentsText>
               <st.ContentsYoutube>
-                <YouTube
-                  videoId="2g811Eo7K8U"
-                  opts={opts}
-                  onReady={onPlayerReady}
-                />
-                ;{/* {data?.fetchBoard.youtubeUrl} */}
+                {props.data?.fetchBoard.youtubeUrl !== "" && (
+                  <st.Youtube
+                    url={props.data?.fetchBoard.youtubeUrl ?? ""}
+                    width="486px"
+                    height="240px"
+                  />
+                )}
               </st.ContentsYoutube>
             </st.ContentsBody>
             <st.LikeDislike>

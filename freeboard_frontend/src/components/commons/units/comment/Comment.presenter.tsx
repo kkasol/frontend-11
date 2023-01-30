@@ -1,6 +1,7 @@
 import * as st from "./Comment.styles";
 import { ChangeEvent, MouseEventHandler, ChangeEventHandler } from "react";
 import { IQuery } from "../../../../commons/types/generated/types";
+import { Rate } from "antd";
 interface IProps {
   commentData: Pick<IQuery, "fetchBoardComments"> | undefined;
 
@@ -10,6 +11,8 @@ interface IProps {
 
   onClickCommentSignUP: MouseEventHandler<HTMLButtonElement>;
   onClickCommentDelete: MouseEventHandler<HTMLImageElement>;
+  rating: any;
+  onChangeRate: any;
 }
 
 export default function BoardCommentUI(props: IProps) {
@@ -31,11 +34,7 @@ export default function BoardCommentUI(props: IProps) {
             placeholder="비밀번호"
             onChange={props.onChangeCommentPassword}
           ></st.CommentPassword>
-          <st.CommentRating src="/Star.png"></st.CommentRating>
-          <st.CommentRating src="/Star.png"></st.CommentRating>
-          <st.CommentRating src="/Star.png"></st.CommentRating>
-          <st.CommentRating src="/Star.png"></st.CommentRating>
-          <st.CommentRating src="/Star.png"></st.CommentRating>
+          <Rate onChange={props.onChangeRate} value={props.rating} />
         </st.CommentInfo>
         <st.CommentContents
           placeholder="개인정보를 공유 및 요청하거나, 명예 훼손, 
@@ -58,11 +57,7 @@ export default function BoardCommentUI(props: IProps) {
                 <st.RatingContents>
                   <st.WriterRating>
                     <st.Comment1Writer>{el.writer}</st.Comment1Writer>
-                    <st.CommentRating src="/Star.png"></st.CommentRating>
-                    <st.CommentRating src="/Star.png"></st.CommentRating>
-                    <st.CommentRating src="/Star.png"></st.CommentRating>
-                    <st.CommentRating src="/Star.png"></st.CommentRating>
-                    <st.CommentRating src="/Star.png"></st.CommentRating>
+                    <st.Rating value={el.rating} disabled></st.Rating>
                   </st.WriterRating>
                   <st.Comment1Contents>{el.contents}</st.Comment1Contents>
                 </st.RatingContents>

@@ -1,8 +1,9 @@
 import { ChangeEvent, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import BoardWriteUI from "./BoardWrite.presenter";
 import { CREATE_BOARD, UPDATE_BOARD } from "./BoardWrite.query";
+import type { Address } from "react-daum-postcode";
 
 interface IBoardWrite {
   isEdit: boolean;
@@ -18,14 +19,18 @@ export default function BoardWrite(props: IBoardWrite) {
   const [passwordError, setPasswordError] = useState("");
   const [titleError, setTitleError] = useState("");
   const [bodyError, setBodyError] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
+
   const [createBoard] = useMutation(CREATE_BOARD);
   const [updateBoard] = useMutation(UPDATE_BOARD);
   const router = useRouter();
-  const [addresscode, setAddressCode] = useState("");
-  const [address, setAddress] = useState();
-  const [addressDetail, setAddressDetail] = useState();
+  const [zipcode, setZipcode] = useState("");
+  const [address, setAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [isEdit] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [postData, setPostData] = useState();
 
   function onChangeName(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
@@ -79,20 +84,14 @@ export default function BoardWrite(props: IBoardWrite) {
       setIsActive(false);
     }
   }
-  function onChangeAddressCode(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value;
-    setAddressCode(value);
-  }
-
-  function onChangeAddress(event: any) {
-    const value = event.target.value;
-    setAddress(value);
-  }
-
-  function onChangeAddressDetail(event: any) {
-    const value = event.target.value;
-    setAddressDetail(value);
-  }
+  const onChangeYoutubeUrl = (event: ChangeEvent<HTMLInputElement>): void => {
+    setYoutubeUrl(event.target.value);
+  };
+  const onChangeAddressDetail = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    setAddressDetail(event.target.value);
+  };
 
   const onClickSignUp = async () => {
     if (!name) {
@@ -115,6 +114,7 @@ export default function BoardWrite(props: IBoardWrite) {
     } else {
       setBodyError("");
     }
+    console.log("AAAAAAAAAAAAAAAAA");
     try {
       const result = await createBoard({
         variables: {
@@ -123,8 +123,9 @@ export default function BoardWrite(props: IBoardWrite) {
             password,
             title,
             contents: body,
+            youtubeUrl,
             boardAddress: {
-              zipcode: addresscode,
+              zipcode,
               address,
               addressDetail,
             },
@@ -153,6 +154,20 @@ export default function BoardWrite(props: IBoardWrite) {
     });
     router.push(`/boards/${result.data.updateBoard._id}`);
   };
+  const showAddressModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const addressSearch = (data: Address): void => {
+    setAddress(data.address);
+    setZipcode(data.zipcode);
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const handleComplete = (data: Address) => {
+    setIsModalOpen(false);
+  };
+
   return (
     <BoardWriteUI
       onChangeName={onChangeName}
@@ -161,16 +176,21 @@ export default function BoardWrite(props: IBoardWrite) {
       passwordError={passwordError}
       onChangeTitle={onChangeTitle}
       onChangeBody={onChangeBody}
+      onChangeYoutubeUrl={onChangeYoutubeUrl}
       bodyError={bodyError}
       titleError={titleError}
-      onChangeAddress={onChangeAddress}
-      onChangeAddressCode={onChangeAddressCode}
       onChangeAddressDetail={onChangeAddressDetail}
       onClickSignUp={onClickSignUp}
       onClickEdit={onClickEdit}
       isActive={isActive}
       isEdit={props.isEdit}
       data={props.data}
+      showAddressModal={showAddressModal}
+      isModalOpen={isModalOpen}
+      zipcode={zipcode}
+      address={address}
+      addressDetail={addressDetail}
+      addressSearch={addressSearch}
     />
   );
 }

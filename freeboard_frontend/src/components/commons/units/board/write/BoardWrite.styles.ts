@@ -162,6 +162,12 @@ export const RadioYoutube = styled.input`
   height: 18px;
   margin-right: 7px;
 `;
+export const Youtube = styled.input`
+  width: 1100px;
+  height: 52px;
+  padding-left: 16px;
+  border: 1px solid #bdbdbd;
+`;
 export const RadioPicture = styled.input`
   accent-color: blue;
   width: 18px;
