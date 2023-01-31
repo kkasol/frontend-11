@@ -114,7 +114,6 @@ export default function BoardWrite(props: IBoardWrite) {
     } else {
       setBodyError("");
     }
-    console.log("AAAAAAAAAAAAAAAAA");
     try {
       const result = await createBoard({
         variables: {

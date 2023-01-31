@@ -15,47 +15,45 @@ import {
 } from "../../../../../commons/types/generated/types";
 
 export default function BoardComment() {
-  const router = useRouter(); 
+  const router = useRouter();
   if (typeof router.query.boardId !== "string") return <></>;
   const [boardCommentId, setBoardCommentId] = useState("");
   const [password, setPassword] = useState("");
+
   const [deleteBoardComment] = useMutation<
     Pick<IMutation, "deleteBoardComment">,
     IMutationDeleteBoardCommentArgs
   >(DELETE_BOARD_COMMENT);
 
-  const onClickDelete = async (
-    event: MouseEvent<HTMLButtonElement>
-  ): Promise<void> => {
-    // const password = prompt("비밀번호를 입력하세요.");
-    try {
-      await deleteBoardComment({
-        variables: {
-          password,
-          boardCommentId,
-        },
-        refetchQueries: [
-          {
-            query: FETCH_BOARD_COMMENTS,
-            variables: { boardId: router.query.boardId },
-          },
-        ],
-      });
-    } catch (error) {
-        if (error instanceof Error) alert(error.message);
-      }
-    };
-
-
-  const { data } = useQuery<
+  const { data, fetchMore } = useQuery<
     Pick<IQuery, "fetchBoardComments">,
     IQueryFetchBoardCommentsArgs
   >(FETCH_BOARD_COMMENTS, {
     variables: { boardId: router.query.id },
   });
 
-
+  const onLoadMore = () => {
+    if (data === undefined) return;
+    void fetchMore({
+      variables: {
+        page: Math.ceil(data?.fetchBoardComments.length / 10 / 10) + 1,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (fetchMoreResult.fetchBoardComments === undefined) {
+          return {
+            FetchBoardComments: [...prev.fetchBoardComments],
+          };
+        }
+        return {
+          fetchBoards: [
+            ...prev.fetchBoardComments,
+            ...fetchMoreResult.fetchBoardComments,
+          ],
+        };
+      },
+    });
   };
+
   const onClickCommentDelete = (event: MouseEvent<HTMLImageElement>) => {
     const password = prompt("비밀번호를 입력하세요");
     try {
@@ -80,13 +78,12 @@ export default function BoardComment() {
   ): void => {
     setPassword(event.target.value);
   };
-  
+
   return (
     <BoardCommentFinishUI
       data={data}
       onClickCommentDelete={onClickCommentDelete}
-     
+      onLoadMore={onLoadMore}
     />
   );
-}
 }

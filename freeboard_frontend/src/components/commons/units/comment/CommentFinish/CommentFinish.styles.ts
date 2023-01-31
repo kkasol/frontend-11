@@ -8,6 +8,12 @@ export const Footer = styled.div`
   margin-top: 20px;
   padding-bottom: 500px;
 `;
+export const Wrapper = styled.div`
+  height: 500px;
+  width: 450px;
+  overflow: auto;
+`;
+
 export const WriterImage = styled.img`
   margin-right: 15px;
   width: 40px;
