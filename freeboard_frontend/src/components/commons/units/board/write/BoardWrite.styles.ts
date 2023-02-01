@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Modal } from "antd";
+import DaumPostcode from "react-daum-postcode";
 
 export const SignUp = styled.div`
   font-size: 36px;
@@ -202,3 +203,6 @@ export const ErrorText = styled.div`
   width: 100%;
   height: 30px;
 `;
+export const AddressModal = styled(Modal)``;
+
+export const AddressSearchInput = styled(DaumPostcode)``;

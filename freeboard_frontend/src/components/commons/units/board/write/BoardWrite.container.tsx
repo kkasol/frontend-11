@@ -28,9 +28,8 @@ export default function BoardWrite(props: IBoardWrite) {
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [isActive, setIsActive] = useState(false);
-  const [isEdit] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [postData, setPostData] = useState();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   function onChangeName(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
@@ -153,18 +152,14 @@ export default function BoardWrite(props: IBoardWrite) {
     });
     router.push(`/boards/${result.data.updateBoard._id}`);
   };
-  const showAddressModal = () => {
-    setIsModalOpen((prev) => !prev);
+  const onClickAddressSearch = (): void => {
+    setIsOpen((prev) => !prev);
   };
 
-  const addressSearch = (data: Address): void => {
+  const onCompleteAddressSearch = (data: Address): void => {
     setAddress(data.address);
-    setZipcode(data.zipcode);
-    setIsModalOpen((prev) => !prev);
-  };
-
-  const handleComplete = (data: Address) => {
-    setIsModalOpen(false);
+    setZipcode(data.zonecode);
+    setIsOpen((prev) => !prev);
   };
 
   return (
@@ -179,17 +174,17 @@ export default function BoardWrite(props: IBoardWrite) {
       bodyError={bodyError}
       titleError={titleError}
       onChangeAddressDetail={onChangeAddressDetail}
+      onCompleteAddressSearch={onCompleteAddressSearch}
+      onClickAddressSearch={onClickAddressSearch}
       onClickSignUp={onClickSignUp}
       onClickEdit={onClickEdit}
       isActive={isActive}
       isEdit={props.isEdit}
       data={props.data}
-      showAddressModal={showAddressModal}
-      isModalOpen={isModalOpen}
+      isOpen={isOpen}
       zipcode={zipcode}
       address={address}
       addressDetail={addressDetail}
-      addressSearch={addressSearch}
     />
   );
 }

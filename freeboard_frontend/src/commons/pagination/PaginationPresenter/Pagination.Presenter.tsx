@@ -1,13 +1,14 @@
 import * as S from "../PaginationStyle/Pagination.styles";
 import { IQuery } from "../../types/generated/types";
+import type { MouseEvent } from "react";
 interface IPaginationUIProps {
   data?: Pick<IQuery, "fetchBoards">;
   onClickPrevPage: () => void;
   onClickPage: (event: MouseEvent<HTMLSpanElement>) => void;
   onClickNextPage: () => void;
-  startPage: any;
-  choicePage: any;
-  lastPage: any;
+  startPage: number;
+  choicePage: (event: MouseEvent<HTMLSpanElement>) => void;
+  lastPage: number;
 }
 
 export default function PaginationUI(props: IPaginationUIProps) {
@@ -26,11 +27,7 @@ export default function PaginationUI(props: IPaginationUIProps) {
               key={index + props.startPage}
               id={String(index + props.startPage)}
               onClick={props.onClickPage}
-              style={{
-                margin: "10px",
-                color:
-                  index + props.startPage === props.choicePage ? "red" : "",
-              }}
+              isActive={props.startPage + index === props.choicePage}
             >
               {index + props.startPage}
             </S.IndexSpan>

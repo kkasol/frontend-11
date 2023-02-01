@@ -12,7 +12,7 @@ import { MouseEvent } from "react";
 export default function BoardList() {
   const router = useRouter();
 
-  const { data, refetch, fetchMore } = useQuery<
+  const { data, refetch } = useQuery<
     Pick<IQuery, "fetchBoards">,
     IQueryFetchBoardsArgs
   >(FETCH_BOARDS);
@@ -26,29 +26,13 @@ export default function BoardList() {
     if (event.target instanceof HTMLDivElement)
       router.push(`./boards/${event.target.id}`);
   };
-  const onLoadMore = () => {
-    if (data === undefined) return;
-    void fetchMore({
-      variables: { page: Math.ceil(data?.fetchBoards.length / 10 / 10) + 1 },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (fetchMoreResult.fetchBoards === undefined) {
-          return {
-            FetchBoards: [...prev.fetchBoards],
-          };
-        }
-        return {
-          fetchBoards: [...prev.fetchBoards, ...fetchMoreResult.fetchBoards],
-        };
-      },
-    });
-  };
+
   return (
     <BoardListUI
       data={data}
       onClickToFinish={onClickToFinish}
       count={dataBoardsCount?.fetchBoardsCount}
       refetch={refetch}
-      onLoadMore={onLoadMore}
     />
   );
 }

@@ -17,7 +17,7 @@ import {
   IQueryFetchBoardCommentsArgs,
 } from "../../../../../src/commons/types/generated/types";
 
-export default function BoardComment() {
+export default function BoardCommentFinish() {
   const router = useRouter();
   const [commentWriter, setCommentWriter] = useState("");
   const [commentPassword, setCommentPassword] = useState("");
@@ -25,11 +25,6 @@ export default function BoardComment() {
   const [rating, setRating] = useState(0);
   const [isEdit, setIsEdit] = useState(false);
 
-  const [createBoardComment] = useMutation(CREATE_BOARD_COMMENT);
-  const [updateBoardComment] = useMutation<
-    Pick<IMutation, "updateBoardComment">,
-    IMutationUpdateBoardCommentArgs
-  >(UPDATE_BOARD_COMMENT);
   const [deleteBoardComment] = useMutation<
     Pick<IMutation, "deleteBoardComment">,
     IMutationDeleteBoardCommentArgs
@@ -60,29 +55,6 @@ export default function BoardComment() {
     const value = event.target.value;
     setCommentContents(value);
   }
-  const onClickCommentSignUP = async () => {
-    try {
-      const result = await createBoardComment({
-        variables: {
-          createBoardCommentInput: {
-            writer: commentWriter,
-            password: commentPassword,
-            contents: commentContents,
-            rating,
-          },
-          boardId: router.query.id,
-        },
-        refetchQueries: [
-          {
-            query: FETCH_BOARD_COMMENTS,
-            variables: { boardId: router.query.id },
-          },
-        ],
-      });
-    } catch (error) {
-      if (error instanceof Error) alert(error.message);
-    }
-  };
 
   const onLoadMore = () => {
     if (commentData === undefined) return;
@@ -103,7 +75,9 @@ export default function BoardComment() {
       },
     });
   };
-
+  const onClickMoveToCommentEdit = () => {
+    setIsEdit(true);
+  };
   const onClickCommentEdit = async (): Promise<void> => {
     if (commentContents === "") {
       alert("내용이 수정되지 않았습니다.");
@@ -160,7 +134,6 @@ export default function BoardComment() {
       onChangeCommentWriter={onChangeCommentWriter}
       onChangeCommentPassword={onChangeCommentPassword}
       onChangeCommentContents={onChangeCommentContents}
-      onClickCommentSignUP={onClickCommentSignUP}
       commentData={commentData}
       onClickMoveToCommentEdit={onClickMoveToCommentEdit}
       onClickCommentEdit={onClickCommentEdit}

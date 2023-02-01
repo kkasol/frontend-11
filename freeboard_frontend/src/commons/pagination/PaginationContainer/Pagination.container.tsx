@@ -12,22 +12,25 @@ interface IPaginationProps {
 
 export default function Pagination(props: IPaginationProps): JSX.Element {
   const [startPage, setStartPage] = useState(1);
-  const [choicePage, setChoicePage] = useState();
+  const [choicePage, setChoicePage] = useState(1);
   const lastPage = Math.ceil((props.count ?? 10) / 10);
 
   const onClickPrevPage = (): void => {
     if (startPage === 1) return;
     setStartPage(startPage - 10);
+    setChoicePage(startPage - 10);
     void props.refetch({ page: startPage - 10 });
   };
 
   const onClickPage = (event: MouseEvent<HTMLSpanElement>): void => {
-    void props.refetch({ page: Number(event.currentTarget.id) });
-    setChoicePage(Number(event.currentTarget.id));
+    const choicePage = Number(event.currentTarget.id);
+    setChoicePage(choicePage);
+    void props.refetch({ page: choicePage });
   };
   const onClickNextPage = (): void => {
     if (startPage + 10 <= lastPage) {
       setStartPage(startPage + 10);
+      setChoicePage(startPage + 10);
       void props.refetch({ page: startPage + 10 });
     }
   };

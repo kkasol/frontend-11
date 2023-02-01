@@ -7,7 +7,6 @@ import {
   DISLIKE_BOARD,
 } from "./BoardFinish.query";
 import BoardFinishUI from "./BoardFinish.presenter";
-import BoardComment from "../../comment/Comment.container";
 // import { useState } from "react";
 import {
   IQuery,
@@ -83,7 +82,6 @@ export default function BoardFinish() {
         onClickEdit={onClickEdit}
         data={data}
       />
-      <BoardComment />
     </>
   );
 }

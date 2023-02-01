@@ -1,34 +1,36 @@
 import { useMutation, useQuery } from "@apollo/client";
-
+import { useState } from "react";
 import { useRouter } from "next/router";
 import {
   FETCH_BOARD_COMMENTS,
   CREATE_BOARD_COMMENT,
   DELETE_BOARD_COMMENT,
-} from "./CommentWrite.query";
-import BoardCommentUI from "./CommentWrite.presenter";
-import { ChangeEvent, useState, MouseEvent } from "react";
+  UPDATE_BOARD_COMMENT,
+} from "./Comment.query";
+import BoardCommentUI from "./Comment.presenter";
+import { ChangeEvent } from "react";
 import {
   IMutation,
-  IMutationDeleteBoardCommentArgs,
+  IMutationUpdateBoardCommentArgs,
   IQuery,
   IQueryFetchBoardCommentsArgs,
-} from "../../../../../commons/types/generated/types";
+} from "../../../../../src/commons/types/generated/types";
 
-export default function BoardComment() {
+export default function BoardCommentWrite() {
   const router = useRouter();
   const [commentWriter, setCommentWriter] = useState("");
   const [commentPassword, setCommentPassword] = useState("");
   const [commentContents, setCommentContents] = useState("");
-  const [star, setStar] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [isEdit, setIsEdit] = useState(false);
 
   const [createBoardComment] = useMutation(CREATE_BOARD_COMMENT);
-  const [deleteBoardComment] = useMutation<
-    Pick<IMutation, "deleteBoardComment">,
-    IMutationDeleteBoardCommentArgs
-  >(DELETE_BOARD_COMMENT);
+  const [updateBoardComment] = useMutation<
+    Pick<IMutation, "updateBoardComment">,
+    IMutationUpdateBoardCommentArgs
+  >(UPDATE_BOARD_COMMENT);
 
-  const { data: commentData } = useQuery<
+  const { data: commentData, fetchMore } = useQuery<
     Pick<IQuery, "fetchBoardComments">,
     IQueryFetchBoardCommentsArgs
   >(FETCH_BOARD_COMMENTS, {
@@ -36,7 +38,9 @@ export default function BoardComment() {
       boardId: `${router.query.id}`,
     },
   });
-
+  const onChangeRate = (event: ChangeEvent<HTMLElement>) => {
+    setRating(event);
+  };
   function onChangeCommentWriter(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     setCommentWriter(value);
@@ -51,7 +55,6 @@ export default function BoardComment() {
     const value = event.target.value;
     setCommentContents(value);
   }
-
   const onClickCommentSignUP = async () => {
     try {
       const result = await createBoardComment({
@@ -60,7 +63,7 @@ export default function BoardComment() {
             writer: commentWriter,
             password: commentPassword,
             contents: commentContents,
-            rating: star,
+            rating,
           },
           boardId: router.query.id,
         },
@@ -74,37 +77,49 @@ export default function BoardComment() {
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
-    console.log(commentData);
   };
-  const onClickCommentDelete = (event: MouseEvent<HTMLImageElement>) => {
-    const password = prompt("비밀번호를 입력하세요");
+
+  const onClickCommentEdit = async (): Promise<void> => {
+    if (commentContents === "") {
+      alert("내용이 수정되지 않았습니다.");
+      return;
+    }
+    if (commentPassword === "") {
+      alert("비밀번호가 입력되지 않았습니다.");
+      return;
+    }
+
     try {
-      deleteBoardComment({
+      await updateBoardComment({
         variables: {
-          boardCommentId: event.target.id,
+          updateBoardCommentInput,
           password: commentPassword,
+          boardCommentId: commentData?.fetchBoardComments._id,
         },
         refetchQueries: [
           {
             query: FETCH_BOARD_COMMENTS,
-            variables: { boardId: router.query.id },
+            variables: { boardId: router.query.boardId },
           },
         ],
       });
+      setIsEdit?.(false);
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
   };
+
   return (
     <BoardCommentUI
+      rating={rating}
+      onChangeRate={onChangeRate}
       onChangeCommentWriter={onChangeCommentWriter}
       onChangeCommentPassword={onChangeCommentPassword}
       onChangeCommentContents={onChangeCommentContents}
       onClickCommentSignUP={onClickCommentSignUP}
       commentData={commentData}
-      onClickCommentDelete={onClickCommentDelete}
-      setStar={setStar}
-      star={star}
+      onClickCommentEdit={onClickCommentEdit}
+      isEdit={isEdit}
     />
   );
 }

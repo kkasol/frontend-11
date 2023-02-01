@@ -67,10 +67,11 @@ export const CommentSignUp = styled.div`
   margin-bottom: 40px;
 `;
 export const CountLength = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  color: #bdbdbd;
-  margin-left: 10px;
+  width: 100%;
+  height: 51px;
+  line-height: 51px;
+  padding-left: 20px;
+  color: gray;
 `;
 export const SignUpBtn = styled.button`
   :hover {
@@ -87,6 +88,12 @@ export const SignUpBtn = styled.button`
   font-weight: 500;
   margin-right: -7px;
 `;
+export const Wrapper = styled.div`
+  height: 800px;
+  width: 100%;
+  overflow: auto;
+`;
+
 export const Comment1 = styled.div`
   width: 100%;
   margin-bottom: 15px;
@@ -126,6 +133,7 @@ export const Comment1Date = styled.div`
   font-size: 12px;
   color: #bdbdbd;
 `;
+export const CommentEdit = styled.button``;
 export const CommentDelete = styled.img`
   :hover {
     cursor: pointer;

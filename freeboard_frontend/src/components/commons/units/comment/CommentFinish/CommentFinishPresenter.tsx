@@ -1,23 +1,34 @@
-import * as st from "./CommentFinish.styles";
-import { MouseEventHandler } from "react";
-import { IQuery } from "../../../../../commons/types/generated/types";
+import * as st from "./Comment.styles";
+import { ChangeEvent, MouseEventHandler, ChangeEventHandler } from "react";
+import { IQuery } from "../../../../commons/types/generated/types";
 import InfiniteScroll from "react-infinite-scroller";
+import type { IBoardComment } from "../../../../commons/types/generated/types";
 
-interface IProps {
+interface IBoardCommentUIProps {
   commentData: Pick<IQuery, "fetchBoardComments"> | undefined;
-  data?: Pick<IQuery, "fetchBoardComments">;
-
+  writer: string;
+  password: string;
+  contents: string;
+  onChangeCommentWriter: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeCommentPassword: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeCommentContents: ChangeEventHandler<HTMLTextAreaElement>;
+  onClickCommentEdit: MouseEventHandler<HTMLButtonElement>;
+  onClickCommentSignUP: MouseEventHandler<HTMLButtonElement>;
+  onClickMoveToCommentEdit: MouseEventHandler<HTMLButtonElement>;
   onClickCommentDelete: MouseEventHandler<HTMLImageElement>;
-  setStar: any;
-  star: any;
+  rating: number;
+  onChangeRate: any;
   onLoadMore: () => void;
+  isEdit: any;
+  el?: IBoardComment;
 }
 
-export default function BoardCommentFinishUI(props: IProps) {
+export default function BoardCommentUI(props: IBoardCommentUIProps) {
   return (
     <div>
       <st.Footer>
         <st.Line></st.Line>
+
         <st.Wrapper>
           <InfiniteScroll
             pageStart={0}
@@ -25,7 +36,7 @@ export default function BoardCommentFinishUI(props: IProps) {
             hasMore={true}
             useWindow={false}
           >
-            {props.data?.fetchBoardComments.map((el) => (
+            {props.commentData?.fetchBoardComments.map((el) => (
               <st.Comment1 key={el._id}>
                 <st.CommentColumn>
                   <st.CommentRow>
@@ -33,14 +44,16 @@ export default function BoardCommentFinishUI(props: IProps) {
                     <st.RatingContents>
                       <st.WriterRating>
                         <st.Comment1Writer>{el.writer}</st.Comment1Writer>
-                        <st.Star value={el.rating} disabled />
+                        <st.Rating value={el.rating} disabled></st.Rating>
                       </st.WriterRating>
                       <st.Comment1Contents>{el.contents}</st.Comment1Contents>
-                      <st.Star onChange={props.star} />
                     </st.RatingContents>
                   </st.CommentRow>
                   <st.Comment1Date>{el.createdAt.slice(0, 10)}</st.Comment1Date>
                 </st.CommentColumn>
+                <st.CommentEdit onClick={props.onClickMoveToCommentEdit}>
+                  수정하기
+                </st.CommentEdit>
                 <st.CommentDelete
                   src="/x.png"
                   onClick={props.onClickCommentDelete}
@@ -50,6 +63,7 @@ export default function BoardCommentFinishUI(props: IProps) {
             ))}
           </InfiniteScroll>
         </st.Wrapper>
+
         <st.Line></st.Line>
       </st.Footer>
     </div>

@@ -1,7 +1,9 @@
 import * as st from "./BoardFinish.styles";
 import { MouseEventHandler } from "react";
 import { IQuery } from "../../../../../commons/types/generated/types";
-interface IProps {
+interface IBoardFinishUIProps {
+  data?: Pick<IQuery, "fetchBoard">;
+
   el: any;
   commentData: Pick<IQuery, "fetchBoardComments"> | undefined;
   writer?: string;
@@ -17,7 +19,7 @@ interface IProps {
   onClickDelete: MouseEventHandler<HTMLButtonElement>;
   // data?: Pick<IQuery, "fetchBoard">;
 }
-export default function BoardFinishUI(props: IProps) {
+export default function BoardFinishUI(props: IBoardFinishUIProps) {
   return (
     <div>
       <st.Total>
@@ -26,7 +28,7 @@ export default function BoardFinishUI(props: IProps) {
             <st.ImageDate>
               <st.WriterImage src="/Vector.png"></st.WriterImage>
               <st.WriteDate>
-                <st.Writer>{props.writer}</st.Writer>
+                <st.Writer>{props.data?.fetchBoard?.writer}</st.Writer>
                 <st.CreateDate>date: {props.createdAt}</st.CreateDate>
               </st.WriteDate>
             </st.ImageDate>
@@ -37,12 +39,14 @@ export default function BoardFinishUI(props: IProps) {
           </st.Header>
           <st.Line></st.Line>
           <st.Contents>
-            <st.ContentsTitle>{props.title}</st.ContentsTitle>
+            <st.ContentsTitle>{props.data?.fetchBoard?.title}</st.ContentsTitle>
             <st.ContentsBody>
               <st.ContentsImage src="/image.png">
                 {/* {data?.fetchBoard.image} */}
               </st.ContentsImage>
-              <st.ContentsText>{props.contents}</st.ContentsText>
+              <st.ContentsText>
+                {props.data?.fetchBoard?.contents}
+              </st.ContentsText>
               <st.ContentsYoutube>
                 {props.data?.fetchBoard.youtubeUrl !== "" && (
                   <st.Youtube
