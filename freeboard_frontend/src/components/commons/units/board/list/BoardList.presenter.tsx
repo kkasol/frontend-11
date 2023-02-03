@@ -1,7 +1,7 @@
 import * as St from "./BoardList.styles";
 import { IQuery } from "../../../../../commons/types/generated/types";
 import { MouseEvent } from "react";
-import PaginationPage from "../../../../../commons/pagination";
+import Pagination from "../../../../../commons/pagination/Pagination.container";
 import { IQueryFetchBoardsArgs } from "../../../../../commons/types/generated/types";
 import { ApolloQueryResult } from "@apollo/client";
 
@@ -34,7 +34,7 @@ export default function BoardListUI(props: IBoardListUIProps) {
             <St.BoardBodyDate>{el.createdAt.slice(0, 10)}</St.BoardBodyDate>
           </St.BoardBody>
         ))}
-        <PaginationPage refetch={props.refetch} count={props.count} />
+        <Pagination refetch={props.refetch} count={props.count} />
       </St.BoardList>
     </St.Wrapper>
   );

@@ -86,12 +86,14 @@ export default function BoardComment() {
 
   const onLoadMore = () => {
     if (commentData === undefined) return;
+
     void fetchMore({
       variables: {
-        page: Math.ceil(commentData?.fetchBoardComments.length / 10) + 1,
+        page:
+          Math.ceil((commentData?.fetchBoardComments.length ?? 10) / 10) + 1,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        if (fetchMoreResult?.fetchBoardComments === undefined)
+        if (fetchMoreResult.fetchBoardComments === undefined)
           return { fetchBoardComments: [...prev.fetchBoardComments] };
 
         return {
@@ -102,37 +104,38 @@ export default function BoardComment() {
         };
       },
     });
+    console.log(commentData);
   };
 
-  const onClickCommentEdit = async (): Promise<void> => {
-    if (commentContents === "") {
-      alert("내용이 수정되지 않았습니다.");
-      return;
-    }
-    if (commentPassword === "") {
-      alert("비밀번호가 입력되지 않았습니다.");
-      return;
-    }
+  // const onClickCommentEdit = async (): Promise<void> => {
+  //   if (commentContents === "") {
+  //     alert("내용이 수정되지 않았습니다.");
+  //     return;
+  //   }
+  //   if (commentPassword === "") {
+  //     alert("비밀번호가 입력되지 않았습니다.");
+  //     return;
+  //   }
 
-    try {
-      await updateBoardComment({
-        variables: {
-          updateBoardCommentInput,
-          password: commentPassword,
-          boardCommentId: commentData?.fetchBoardComments._id,
-        },
-        refetchQueries: [
-          {
-            query: FETCH_BOARD_COMMENTS,
-            variables: { boardId: router.query.boardId },
-          },
-        ],
-      });
-      setIsEdit?.(false);
-    } catch (error) {
-      if (error instanceof Error) alert(error.message);
-    }
-  };
+  //   try {
+  //     await updateBoardComment({
+  //       variables: {
+  //         // updateBoardCommentInput,
+  //         password: commentPassword,
+  //         boardCommentId: commentData?.fetchBoardComments._id,
+  //       },
+  //       refetchQueries: [
+  //         {
+  //           query: FETCH_BOARD_COMMENTS,
+  //           variables: { boardId: router.query.boardId },
+  //         },
+  //       ],
+  //     });
+  //     setIsEdit(true);
+  //   } catch (error) {
+  //     if (error instanceof Error) alert(error.message);
+  //   }
+  // };
 
   const onClickCommentDelete = (event: MouseEvent<HTMLImageElement>) => {
     const password = prompt("비밀번호를 입력하세요");
@@ -162,8 +165,8 @@ export default function BoardComment() {
       onChangeCommentContents={onChangeCommentContents}
       onClickCommentSignUP={onClickCommentSignUP}
       commentData={commentData}
-      onClickMoveToCommentEdit={onClickMoveToCommentEdit}
-      onClickCommentEdit={onClickCommentEdit}
+      // onClickMoveToCommentEdit={onClickMoveToCommentEdit}
+      // onClickCommentEdit={onClickCommentEdit}
       onClickCommentDelete={onClickCommentDelete}
       onLoadMore={onLoadMore}
       isEdit={isEdit}

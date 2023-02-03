@@ -1,24 +1,26 @@
 import styled from "@emotion/styled";
 export const Wrapper = styled.div`
   width: 1200px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 export const BoardList = styled.div`
   width: 100%;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   text-align: center;
+  margin-bottom: 10px;
 `;
 export const BoardHeader = styled.div`
-  height: 52px;
+  height: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 27px;
   font-weight: 500;
 `;
 export const BoardHeaderId = styled.div`
@@ -36,12 +38,12 @@ export const BoardHeaderDate = styled.div`
 `;
 
 export const BoardBody = styled.div`
-  height: 52px;
+  height: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 24px;
   border-top: 1px solid #bdbdbd;
 `;
 export const BoardBodyId = styled.div`

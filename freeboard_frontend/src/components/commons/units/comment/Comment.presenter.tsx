@@ -15,7 +15,7 @@ interface IBoardCommentUIProps {
   onChangeCommentContents: ChangeEventHandler<HTMLTextAreaElement>;
   onClickCommentEdit: MouseEventHandler<HTMLButtonElement>;
   onClickCommentSignUP: MouseEventHandler<HTMLButtonElement>;
-  onClickMoveToCommentEdit: MouseEventHandler<HTMLButtonElement>;
+  // onClickMoveToCommentEdit: MouseEventHandler<HTMLButtonElement>;
   onClickCommentDelete: MouseEventHandler<HTMLImageElement>;
   rating: number;
   onChangeRate: any;
@@ -94,9 +94,9 @@ export default function BoardCommentUI(props: IBoardCommentUIProps) {
                   </st.CommentRow>
                   <st.Comment1Date>{el.createdAt.slice(0, 10)}</st.Comment1Date>
                 </st.CommentColumn>
-                <st.CommentEdit onClick={props.onClickMoveToCommentEdit}>
+                {/* <st.CommentEdit onClick={props.onClickMoveToCommentEdit}>
                   수정하기
-                </st.CommentEdit>
+                </st.CommentEdit> */}
                 <st.CommentDelete
                   src="/x.png"
                   onClick={props.onClickCommentDelete}

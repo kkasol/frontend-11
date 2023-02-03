@@ -23,7 +23,7 @@ export default function BoardFinish() {
     FETCH_BOARD,
     {
       variables: {
-        boardId: `${router.query.id}`,
+        boardId: `${router.query.boardId}`,
       },
     }
   );
@@ -34,33 +34,33 @@ export default function BoardFinish() {
     router.push(`/boards/`);
   };
   const onClickEdit = () => {
-    router.push(`/boards/${router.query.id}/edit`);
+    router.push(`/boards/${router.query.boardId}/edit`);
   };
 
   const onClickDelete = () => {
     deleteBoard({
-      variables: { boardId: router.query.id },
+      variables: { boardId: router.query.boardId },
     });
     router.push(`/boards/`);
   };
   const onClickLike = () => {
     likeBoard({
-      variables: { boardId: router.query.id },
+      variables: { boardId: router.query.boardId },
       refetchQueries: [
         {
           query: FETCH_BOARD,
-          variables: { boardId: router.query.id },
+          variables: { boardId: router.query.boardId },
         },
       ],
     });
   };
   const onClickDislike = () => {
     dislikeBoard({
-      variables: { boardId: router.query.id },
+      variables: { boardId: router.query.boardId },
       refetchQueries: [
         {
           query: FETCH_BOARD,
-          variables: { boardId: router.query.id },
+          variables: { boardId: router.query.boardId },
         },
       ],
     });

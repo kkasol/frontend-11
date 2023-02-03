@@ -142,7 +142,7 @@ export default function BoardWrite(props: IBoardWrite) {
         contents: body,
       },
       password,
-      boardId: router.query.id,
+      boardId: router.query.boardId,
     };
     if (title) myVariables.updateBoardInput.title = title;
     if (body) myVariables.updateBoardInput.contents = body;
