@@ -56,11 +56,19 @@ export default function BoardCommentWrite(
 
   const onClickCommentSubmit = async (): Promise<void> => {
     try {
-      // if (typeof router.query.boardId !== "string") {
-      //   alert("시스템에 문제가 있습니다.");
-      //   return;
-      // }
-
+      if (typeof router.query.boardId !== "string") {
+        alert("시스템에 문제가 있습니다.");
+        return;
+      }
+      if (writer === "") {
+        alert("작성자가 입력되지 않았습니다.");
+      }
+      if (password === "") {
+        alert("비밀번호가 입력되지 않았습니다.");
+      }
+      if (contents === "") {
+        alert("내용이 입력되지 않았습니다.");
+      }
       await createBoardComment({
         variables: {
           createBoardCommentInput: {

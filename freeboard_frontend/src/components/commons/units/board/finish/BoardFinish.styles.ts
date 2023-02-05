@@ -7,7 +7,7 @@ export const Total = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 150px 0px 0px 150px;
+  margin: 150px 0 0 0;
 `;
 export const Wrapper = styled.div`
   height: 100%;
@@ -54,7 +54,7 @@ export const Share = styled.img`
 export const Navigation = styled.img``;
 export const Line = styled.div`
   border-top: 1px solid #bdbdbd;
-  margin: 20px 0px 20px 0px;
+  margin: 20px;
 `;
 export const Contents = styled.div`
   width: 100%;
@@ -117,24 +117,28 @@ export const LikeIcon = styled.img`
   :hover {
     cursor: pointer;
   }
+  width: 25px;
+  height: 25px;
 `;
 export const Like = styled.div`
   display: flex;
   flex-direction: column;
   color: #ffd600;
   margin-right: 50px;
-  font-size: 18px;
+  font-size: 23px;
 `;
 export const DislikeIcon = styled.img`
   :hover {
     cursor: pointer;
   }
+  width: 25px;
+  height: 25px;
 `;
 export const Dislike = styled.div`
   display: flex;
   flex-direction: column;
   color: #828282;
-  font-size: 18px;
+  font-size: 23px;
 `;
 export const MiddleButton = styled.div`
   width: 100%;
@@ -188,5 +192,3 @@ export const ToDelete = styled.button`
   font-size: 16px;
   font-weight: 500;
 `;
-
-export const YouTube = styled.div``;

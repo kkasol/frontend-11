@@ -19,6 +19,7 @@ export default function Pagination(props: IPaginationProps): JSX.Element {
     const activePage = Number(event.currentTarget.id);
     setActivePage(activePage);
     void props.refetch({ page: activePage });
+    console.log(activePage);
   };
 
   const onClickPrevPage = (): void => {

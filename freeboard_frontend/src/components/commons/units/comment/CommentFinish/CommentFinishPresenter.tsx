@@ -10,7 +10,12 @@ export default function CommentFinishUI(
   props: ICommentFinishUIProps
 ): JSX.Element {
   return (
-    <InfiniteScroll pageStart={0} loadMore={props.onLoadMore} hasMore={true}>
+    <InfiniteScroll
+      pageStart={0}
+      loadMore={props.onLoadMore}
+      hasMore={true}
+      useWindow={false}
+    >
       {props.data?.fetchBoardComments.map((el) => (
         <CommentFinishUIItem key={el._id} el={el} />
       )) ?? <></>}

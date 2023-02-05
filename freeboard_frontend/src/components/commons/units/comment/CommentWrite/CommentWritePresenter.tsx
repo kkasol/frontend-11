@@ -22,12 +22,11 @@ export default function BoardCommentWriteUI(
 ): JSX.Element {
   return (
     <st.CommentWrapper>
-      {props.isEdit === false && (
-        <>
-          <st.CommentIcon src="/comment.png"></st.CommentIcon>
-          <div>댓글</div>
-        </>
-      )}
+      {props.isEdit === false && <></>}
+      <st.CommentTitle>
+        <st.CommentIcon src="/comment.png"></st.CommentIcon>
+        <span>댓글</span>
+      </st.CommentTitle>
       <st.CommentInfo>
         <st.CommentWriter
           placeholder="작성자"

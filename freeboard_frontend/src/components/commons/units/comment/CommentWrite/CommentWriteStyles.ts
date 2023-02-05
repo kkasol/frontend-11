@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
-import { Rate, Modal } from "antd";
+import { Rate } from "antd";
 
 export const CommentWrapper = styled.div`
   width: 1200px;
-  margin-left: 150px;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  padding-bottom: 500px;
 `;
 export const CommentTitle = styled.div`
   font-size: 18px;
@@ -19,6 +17,8 @@ export const CommentTitle = styled.div`
 `;
 export const CommentIcon = styled.img`
   margin-right: 10px;
+  height: 25px;
+  width: 25px;
 `;
 export const CommentInfo = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const CommentWriter = styled.input`
   width: 180px;
   height: 52px;
   margin-right: 20px;
-  font-size: 16px;
+  font-size: 20px;
   padding-left: 10px;
 `;
 export const WriterImage = styled.img`
@@ -42,7 +42,7 @@ export const WriterImage = styled.img`
 export const CommentPassword = styled.input`
   width: 180px;
   height: 52px;
-  font-size: 16px;
+  font-size: 20px;
   padding-left: 10px;
 `;
 export const CommentRating = styled.img`
@@ -52,13 +52,14 @@ export const CommentRating = styled.img`
 `;
 export const CommentContents = styled.textarea`
   width: 100%;
-  height: 161px;
-  font-size: 16px;
+  height: 180px;
+  font-size: 20px;
   resize: none;
   border: 1px solid #bdbdbd;
+  padding: 10px;
 `;
 export const CommentSignUp = styled.div`
-  width: 100%;
+  width: 1195px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

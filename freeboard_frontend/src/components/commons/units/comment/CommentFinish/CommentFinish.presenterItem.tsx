@@ -85,26 +85,27 @@ export default function ICommentFinishUIItem(
                 <st.WriterImage src="/Vector.png" />
                 <st.RatingContents>
                   <st.WriterRating>
-                    <st.Comment1Writer>{props.el.writer}</st.Comment1Writer>
+                    <st.CommentWriter>{props.el.writer}</st.CommentWriter>
                     <st.Rating value={props.el.rating} disabled></st.Rating>
                   </st.WriterRating>
-                  <st.Comment1Contents>{props.el.contents}</st.Comment1Contents>
+                  <st.CommentContents>{props.el.contents}</st.CommentContents>
                 </st.RatingContents>
               </st.CommentRow>
-              <st.Comment1Date>
-                {props.el.createdAt.slice(0, 10)}
-              </st.Comment1Date>
+              <st.CommentDate>{props.el.createdAt.slice(0, 10)}</st.CommentDate>
             </st.CommentColumn>
-            <st.CommentUpdate
-              src="/edit.png"
-              onClick={onClickUpdate}
-            ></st.CommentUpdate>
-            <st.CommentDelete
-              src="/x.png"
-              onClick={onClickOpenDeleteModal}
-              id={props.el._id}
-            />
+            <st.CommentEdit>
+              <st.CommentUpdate
+                src="/edit.png"
+                onClick={onClickUpdate}
+              ></st.CommentUpdate>
+              <st.CommentDelete
+                src="/x.png"
+                onClick={onClickOpenDeleteModal}
+                id={props.el._id}
+              />
+            </st.CommentEdit>
           </st.Comment1>
+          <st.Line />
         </st.Wrapper>
       ) : (
         <BoardCommentWrite isEdit={true} setIsEdit={setIsEdit} el={props.el} />

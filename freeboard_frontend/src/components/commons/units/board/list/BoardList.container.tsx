@@ -9,7 +9,7 @@ import {
 import { useRouter } from "next/router";
 import { MouseEvent } from "react";
 
-export default function BoardList() {
+export default function BoardList(): JSX.Element {
   const router = useRouter();
 
   const { data, refetch } = useQuery<
@@ -22,7 +22,7 @@ export default function BoardList() {
     IQueryFetchBoardsCountArgs
   >(FETCH_BOARDS_COUNT);
 
-  const onClickToFinish = (event: MouseEvent<HTMLDivElement>) => {
+  const onClickToFinish = (event: MouseEvent<HTMLDivElement>): void => {
     if (event.target instanceof HTMLDivElement)
       router.push(`./boards/${event.target.id}`);
   };

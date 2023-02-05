@@ -38,6 +38,9 @@ export const BoardHeaderDate = styled.div`
 `;
 
 export const BoardBody = styled.div`
+  :hover {
+    color: red;
+  }
   height: 60px;
   display: flex;
   flex-direction: row;

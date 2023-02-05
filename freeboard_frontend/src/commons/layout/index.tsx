@@ -1,10 +1,9 @@
 import LayoutHeader from "./header";
 import LayoutBanner from "./banner";
 import LayoutNavigation from "./navigation";
-import LayoutFooter from "./footer";
 import styled from "@emotion/styled";
 const Body = styled.div`
-  height: 100%;
+  height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,7 +19,6 @@ export default function LayoutPage(props: ILayoutPageProps): JSX.Element {
       <LayoutNavigation />
 
       <Body>{props.children}</Body>
-      <LayoutFooter />
     </>
   );
 }
