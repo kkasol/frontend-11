@@ -56,10 +56,6 @@ export default function BoardCommentWrite(
 
   const onClickCommentSubmit = async (): Promise<void> => {
     try {
-      if (typeof router.query.boardId !== "string") {
-        alert("시스템에 문제가 있습니다.");
-        return;
-      }
       if (writer === "") {
         alert("작성자가 입력되지 않았습니다.");
       }
@@ -95,24 +91,12 @@ export default function BoardCommentWrite(
     setContents("");
   };
   const onClickCommentUpdate = async (): Promise<void> => {
-    if (contents === "") {
-      alert("내용이 수정되지 않았습니다.");
-      return;
-    }
-    if (password === "") {
-      alert("비밀번호가 입력되지 않았습니다.");
-      return;
-    }
-
     try {
       const updateBoardCommentInput: IUpdateBoardCommentInput = {};
+
       if (contents !== "") updateBoardCommentInput.contents = contents;
       if (star !== props.el?.rating) updateBoardCommentInput.rating = star;
 
-      if (typeof props.el?._id !== "string") {
-        alert("시스템에 문제가 있습니다.");
-        return;
-      }
       await updateBoardComment({
         variables: {
           updateBoardCommentInput: {

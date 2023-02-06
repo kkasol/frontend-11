@@ -54,7 +54,7 @@ export const Share = styled.img`
 export const Navigation = styled.img``;
 export const Line = styled.div`
   border-top: 1px solid #bdbdbd;
-  margin: 20px;
+  margin: 20px 20px 150px 20px;
 `;
 export const Contents = styled.div`
   width: 100%;

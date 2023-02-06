@@ -12,7 +12,7 @@ export const BoardList = styled.div`
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 export const BoardHeader = styled.div`
   height: 60px;

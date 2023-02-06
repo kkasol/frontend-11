@@ -20,10 +20,10 @@ export default function GraphqlMutationPage() {
   const onClickSubmit = async () => {
     const result = await 나의함수({
       variables: {
-        //variables 이게 $ 역할을 함
-        writer: writer,
-        title: title,
-        contents: contents,
+        // variables 이게 $ 역할을 함
+        writer,
+        title,
+        contents,
       },
     });
     console.log(result);

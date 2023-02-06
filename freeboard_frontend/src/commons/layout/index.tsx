@@ -3,7 +3,6 @@ import LayoutBanner from "./banner";
 import LayoutNavigation from "./navigation";
 import styled from "@emotion/styled";
 const Body = styled.div`
-  height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
