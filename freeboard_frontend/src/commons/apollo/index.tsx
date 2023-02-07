@@ -4,8 +4,8 @@ interface IApolloSettingProps {
 }
 export default function ApolloSetting(props: IApolloSettingProps): JSX.Element {
   const client = new ApolloClient({
-    // uri: "http://backend-practice.codebootcamp.co.kr/graphql",
-    uri: "http://34.64.114.80/graphql",
+    uri: "http://backend-practice.codebootcamp.co.kr/graphql",
+
     cache: new InMemoryCache(),
   });
   return <ApolloProvider client={client}>{props.children}</ApolloProvider>;
