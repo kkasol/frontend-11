@@ -3,10 +3,10 @@ import type { MouseEvent } from "react";
 import PaginationUI from "./Pagination.Presenter";
 import { IQuery, IQueryFetchBoardsArgs } from "../types/generated/types";
 import { ApolloQueryResult } from "@apollo/client";
-export interface IPaginationProps {
+interface IPaginationProps {
   count?: number;
   refetch: (
-    variables: Partial<IQueryFetchBoardsArgs>
+    variables?: Partial<IQueryFetchBoardsArgs>
   ) => Promise<ApolloQueryResult<Pick<IQuery, "fetchBoards">>>;
 }
 
@@ -19,7 +19,6 @@ export default function Pagination(props: IPaginationProps): JSX.Element {
     const activePage = Number(event.currentTarget.id);
     setActivePage(activePage);
     void props.refetch({ page: activePage });
-    console.log(activePage);
   };
 
   const onClickPrevPage = (): void => {

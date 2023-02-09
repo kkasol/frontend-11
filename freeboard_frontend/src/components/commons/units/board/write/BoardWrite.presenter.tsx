@@ -3,7 +3,6 @@ import * as st from "./BoardWrite.styles";
 import { Modal } from "antd";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import type { IQuery } from "../../../../../commons/types/generated/types";
-
 interface IBoardWriteProps {
   onChangeName: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangePassword: (event: ChangeEvent<HTMLInputElement>) => void;

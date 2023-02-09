@@ -56,6 +56,7 @@ export const BoardBodyTitle = styled.div`
   :hover {
     cursor: pointer;
   }
+
   width: 53%;
 `;
 export const BoardBodyWriter = styled.div`
@@ -63,4 +64,12 @@ export const BoardBodyWriter = styled.div`
 `;
 export const BoardBodyDate = styled.div`
   width: 20%;
+`;
+export const SearchInput = styled.div``;
+export const Search = styled.input`
+  width: 250px;
+  height: 30px;
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;

@@ -7,10 +7,13 @@ import {
   IQueryFetchBoardsCountArgs,
 } from "../../../../../commons/types/generated/types";
 import { useRouter } from "next/router";
-import { MouseEvent } from "react";
+import type { MouseEvent, ChangeEvent } from "react";
+import { useState } from "react";
+import _ from "lodash";
 
 export default function BoardList(): JSX.Element {
   const router = useRouter();
+  const [keyword, setKeyword] = useState("");
 
   const { data, refetch } = useQuery<
     Pick<IQuery, "fetchBoards">,
@@ -26,13 +29,25 @@ export default function BoardList(): JSX.Element {
     if (event.target instanceof HTMLDivElement)
       router.push(`./boards/${event.target.id}`);
   };
+  const getDebounce = _.debounce((value) => {
+    void refetch({
+      search: value,
+      page: 1,
+    });
+    setKeyword(value);
+  }, 500);
 
+  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>): void => {
+    getDebounce(event.currentTarget.value);
+  };
   return (
     <BoardListUI
       data={data}
       onClickToFinish={onClickToFinish}
+      onChangeSearch={onChangeSearch}
       count={dataBoardsCount?.fetchBoardsCount}
       refetch={refetch}
+      keyword={keyword}
     />
   );
 }
