@@ -73,16 +73,14 @@ export const ContentsBody = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export const ContentsImage = styled.img`
-  width: 100%;
-  height: 100%;
+export const ContentsImage = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+`;
+export const Image = styled.img`
+  width: 996px;
+  height: 480px;
   margin-bottom: 30px;
-  margin-top: 30px;
-  text-align: center;
 `;
 export const ContentsText = styled.div`
   height: 100%;

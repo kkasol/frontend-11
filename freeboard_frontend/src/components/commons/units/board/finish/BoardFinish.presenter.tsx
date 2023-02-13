@@ -4,7 +4,6 @@ import { IQuery } from "../../../../../commons/types/generated/types";
 interface IBoardFinishUIProps {
   data?: Pick<IQuery, "fetchBoard">;
 
-  el: any;
   commentData: Pick<IQuery, "fetchBoardComments"> | undefined;
   writer?: string;
   createdAt: string;
@@ -17,7 +16,6 @@ interface IBoardFinishUIProps {
   onClickToList: MouseEventHandler<HTMLButtonElement>;
   onClickEdit: MouseEventHandler<HTMLButtonElement>;
   onClickDelete: MouseEventHandler<HTMLButtonElement>;
-  // data?: Pick<IQuery, "fetchBoard">;
 }
 export default function BoardFinishUI(props: IBoardFinishUIProps) {
   return (
@@ -41,8 +39,15 @@ export default function BoardFinishUI(props: IBoardFinishUIProps) {
           <st.Contents>
             <st.ContentsTitle>{props.data?.fetchBoard?.title}</st.ContentsTitle>
             <st.ContentsBody>
-              <st.ContentsImage src="/image.png">
-                {/* {data?.fetchBoard.image} */}
+              <st.ContentsImage>
+                {props.data?.fetchBoard.images
+                  ?.filter((el) => el)
+                  .map((el) => (
+                    <st.Image
+                      key={el}
+                      src={`https://storage.googleapis.com/${el}`}
+                    />
+                  ))}
               </st.ContentsImage>
               <st.ContentsText>
                 {props.data?.fetchBoard?.contents}

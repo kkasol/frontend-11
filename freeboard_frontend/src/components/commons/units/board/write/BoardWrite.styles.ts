@@ -112,21 +112,11 @@ export const AddressInput = styled.input`
 `;
 
 export const Square3 = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  font-size: 16px;
+  width: 996px;
+  padding-top: 40px;
 `;
 export const Square = styled.div`
-  background-color: #bdbdbd;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  height: 78px;
-  width: 78px;
-  font-size: 12px;
 `;
 
 export const PostSearch = styled.div`

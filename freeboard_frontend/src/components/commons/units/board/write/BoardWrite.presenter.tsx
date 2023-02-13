@@ -3,6 +3,9 @@ import * as st from "./BoardWrite.styles";
 import { Modal } from "antd";
 import DaumPostcodeEmbed from "react-daum-postcode";
 import type { IQuery } from "../../../../../commons/types/generated/types";
+import { v4 as uuidv4 } from "uuid";
+import Uploads01 from "../../../../../commons/uploads/01/Uploads01.container";
+
 interface IBoardWriteProps {
   onChangeName: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangePassword: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -13,6 +16,12 @@ interface IBoardWriteProps {
   onChangeAddressCode: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeAddress: (event: ChangeEvent<HTMLInputElement>) => void;
   onChangeAddressDetail: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangeFileUrls: (fileUrls: string, index: number) => void;
+  onCompleteAddressSearch: (data: any) => void;
+
+  onClickAddressSearch: () => void;
+  onClickEdit: () => void;
+  onClickSignUp: () => void;
   nameError: string;
   passwordError: string;
   titleError: string;
@@ -21,16 +30,13 @@ interface IBoardWriteProps {
   isEdit: boolean;
   isActive: boolean;
   isOpen: boolean;
-  onClickAddressSearch: () => void;
-  onClickEdit: () => void;
-  onClickSignUp: () => void;
+
   isModalOpen: boolean;
-  zipcode: string;
-  onCompleteAddressSearch: (data: any) => void;
   handleComplete: () => void;
-  zipscode?: string;
+  zipcode?: string;
   address?: string;
   addressDetail?: string;
+  fileUrls: string[];
 }
 
 export default function BoardWriteUI(props: IBoardWriteProps) {
@@ -127,16 +133,14 @@ export default function BoardWriteUI(props: IBoardWriteProps) {
         <st.SignTitle>사진 첨부</st.SignTitle>
         <st.Square3>
           <st.Square>
-            <span>+</span>
-            <div>Upload</div>
-          </st.Square>
-          <st.Square>
-            <span>+</span>
-            <div>Upload</div>
-          </st.Square>
-          <st.Square>
-            <span>+</span>
-            <div>Upload</div>
+            {props.fileUrls.map((el, index) => (
+              <Uploads01
+                key={uuidv4()}
+                index={index}
+                fileUrl={el}
+                onChangeFileUrls={props.onChangeFileUrls}
+              />
+            ))}
           </st.Square>
         </st.Square3>
         <st.SignTitle>메인 설정</st.SignTitle>
