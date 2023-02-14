@@ -17,12 +17,14 @@ export const TextInput = styled.input`
   font-size: 19px;
   margin-bottom: 20px;
 `;
+
 export const FinishBtn = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 `;
+
 export const SignUpBTN = styled.button`
   width: 100px;
   height: 45px;
