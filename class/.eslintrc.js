@@ -15,6 +15,9 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "react/display-name": "off",
     "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
   },
 };

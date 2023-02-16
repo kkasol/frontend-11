@@ -6,16 +6,12 @@ import BoardWriteUI from "./BoardWrite.presenter";
 import { CREATE_BOARD, UPDATE_BOARD } from "./BoardWrite.query";
 import type { Address } from "react-daum-postcode";
 import type {
-  IQuery,
   IUpdateBoardInput,
   IMutation,
   IMutationCreateBoardArgs,
   IMutationUpdateBoardArgs,
 } from "../../../../../commons/types/generated/types";
-interface IBoardWriteProps {
-  isEdit: boolean;
-  data?: Pick<IQuery, "fetchBoard">;
-}
+import { IBoardWriteProps } from "./BoardWrite.types";
 
 export default function BoardWrite(props: IBoardWriteProps) {
   const [name, setName] = useState("");
@@ -28,7 +24,6 @@ export default function BoardWrite(props: IBoardWriteProps) {
   const [bodyError, setBodyError] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [fileUrls, setFileUrls] = useState(["", "", ""]);
-
   const router = useRouter();
   const [zipcode, setZipcode] = useState("");
   const [address, setAddress] = useState("");
@@ -161,24 +156,6 @@ export default function BoardWrite(props: IBoardWriteProps) {
       if (error instanceof Error) alert(error.message);
     }
   };
-
-  // const onClickEdit = async () => {
-  //   const myVariables = {
-  //     updateBoardInput: {
-  //       title: title,
-  //       contents: body,
-  //     },
-  //     password,
-  //     boardId: router.query.boardId,
-  //   };
-  //   if (title) myVariables.updateBoardInput.title = title;
-  //   if (body) myVariables.updateBoardInput.contents = body;
-
-  //   const result = await updateBoard({
-  //     variables: myVariables,
-  //   });
-  //   router.push(`/boards/${result.data.updateBoard._id}`);
-  // };
 
   const onClickEdit = async (): Promise<void> => {
     const currentFiles = JSON.stringify(fileUrls);
