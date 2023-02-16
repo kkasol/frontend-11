@@ -9,7 +9,7 @@ interface ISignUpUIProps {
 }
 export default function SignUpUI(props: ISignUpUIProps): JSX.Element {
   return (
-    <>
+    <form>
       <S.Wrapper>
         <S.InputTitle>회원가입</S.InputTitle>
         <S.InputTitle>이메일</S.InputTitle>
@@ -30,16 +30,16 @@ export default function SignUpUI(props: ISignUpUIProps): JSX.Element {
           type="password"
           placeholder="비밀번호를 입력해주세요"
         />
-        <S.InputTitle>비밀번호 확인</S.InputTitle>
+        {/* <S.InputTitle>비밀번호 확인</S.InputTitle>
         <S.TextInput
           onChange={props.onChangePasswordCheck}
           type="password"
           placeholder="비밀번호를 입력해주세요"
-        />
+        /> */}
         <S.FinishBtn>
           <S.SignUpBTN onClick={props.onClickSignUp}>회원가입</S.SignUpBTN>
         </S.FinishBtn>
       </S.Wrapper>
-    </>
+    </form>
   );
 }

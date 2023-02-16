@@ -23,7 +23,10 @@ export default function LayoutHeader(): JSX.Element {
     void router.push(event.currentTarget.id);
   };
 
-  const MENU_BAR = [{ name: "자유게시판", page: "/boards" }];
+  const MENU_BAR = [
+    { name: "자유게시판", page: "/boards" },
+    { name: "중고마켓", page: "/market" },
+  ];
 
   return (
     <Wrapper>
