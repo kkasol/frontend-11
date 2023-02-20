@@ -9,7 +9,7 @@ import type {
   IMutation,
   IMutationLoginUserArgs,
 } from "../../../../commons/types/generated/types";
-import { LOGIN_USER, FETCH_USER_LOGGED_IN } from "./login.queries";
+import { LOGIN_USER } from "./login.queries";
 import LoginUI from "./login.presenter";
 
 export default function Login(): JSX.Element {
@@ -20,9 +20,6 @@ export default function Login(): JSX.Element {
     Pick<IMutation, "loginUser">,
     IMutationLoginUserArgs
   >(LOGIN_USER);
-  console.log(email);
-  const { data: memberData } =
-    useQuery<Pick<IQuery, "fetchUserLoggedIn">>(FETCH_USER_LOGGED_IN);
 
   const [, setAccessToken] = useRecoilState(accessTokenState);
 
@@ -48,6 +45,7 @@ export default function Login(): JSX.Element {
         return;
       }
       setAccessToken(accessToken);
+      localStorage.setItem("accessToken", accessToken);
       void router.push("/boards");
     } catch (error) {
       if (error instanceof Error) alert(error.message);
@@ -58,7 +56,6 @@ export default function Login(): JSX.Element {
       onChangeEmail={onChangeEmail}
       onChangePassword={onChangePassword}
       onClickLogin={onClickLogin}
-      memberData={memberData}
     />
   );
 }

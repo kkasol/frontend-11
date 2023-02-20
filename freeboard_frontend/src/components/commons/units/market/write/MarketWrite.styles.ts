@@ -19,10 +19,10 @@ export const Label = styled.div`
   font-size: 20px;
   font-weight: 500;
 `;
-export const ContentsInput = styled.textarea`
-  height: 150px;
-  margin-bottom: 20px;
-`;
+// export const ContentsInput = styled.textarea`
+//   height: 150px;
+//   margin-bottom: 20px;
+// `;
 export const ImageBox = styled.div`
   margin-bottom: 20px;
   display: flex;
