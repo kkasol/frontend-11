@@ -1,70 +1,52 @@
 import styled from "@emotion/styled";
+import { head } from "lodash";
 export const Wrapper = styled.div`
   width: 1200px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  height: 500px;
-`;
-export const BoardList = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  text-align: center;
-  margin-bottom: 20px;
-`;
-export const BoardHeader = styled.div`
-  height: 60px;
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  font-size: 27px;
-  font-weight: 500;
 `;
-export const BoardHeaderId = styled.div`
-  width: 7%;
-`;
-
-export const BoardHeaderTitle = styled.div`
-  width: 53%;
-`;
-export const BoardHeaderWriter = styled.div`
-  width: 20%;
-`;
-export const BoardHeaderDate = styled.div`
-  width: 20%;
+export const BoardList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin-top: 30px;
+  width: 100%;
 `;
 
 export const BoardBody = styled.div`
-  :hover {
-    color: red;
-  }
-  height: 60px;
+  width: 19%;
+  height: 240px;
+  margin-bottom: 30px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  border-top: 1px solid #bdbdbd;
+  background-color: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 20px;
+  margin: auto;
 `;
 export const BoardBodyId = styled.div`
-  width: 7%;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+export const MarketBodyImage = styled.img`
+  width: 150px;
+  height: 110px;
 `;
 export const BoardBodyTitle = styled.div`
-  :hover {
-    cursor: pointer;
-  }
+  font-size: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+`;
 
-  width: 53%;
-`;
-export const BoardBodyWriter = styled.div`
-  width: 20%;
-`;
 export const BoardBodyDate = styled.div`
-  width: 20%;
+  font-size: 14px;
+  color: #9b9b9b;
 `;
 export const SearchInput = styled.div``;
 export const Search = styled.input`

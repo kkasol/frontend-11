@@ -19,8 +19,6 @@ export default function Uploads01(props: IUploads01Props): JSX.Element {
     event: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     const file = event.target.files?.[0];
-    const isValid = checkValidationImage(file);
-    if (!isValid) return;
 
     try {
       const result = await uploadFile({ variables: { file } });

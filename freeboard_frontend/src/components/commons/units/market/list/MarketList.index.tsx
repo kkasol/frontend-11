@@ -1,19 +1,14 @@
 import { useQuery } from "@apollo/client";
-import {
-  FETCH_USED_ITEMS,
-  // FETCH_USED_ITEMS_COUNT_IBOUGHT,
-} from "./MarketList.queries";
+import { FETCH_USED_ITEMS } from "./MarketList.queries";
 import {
   IQuery,
   IQueryFetchUseditemsArgs,
-  // IQueryFetchUseditemsIBoughtArgs,
 } from "../../../../../commons/types/generated/types";
 import { useRouter } from "next/router";
 import type { MouseEvent, ChangeEvent } from "react";
 import { useState } from "react";
 import _ from "lodash";
 import * as S from "./MarketList.styles";
-// import Pagination from "../../../../../commons/pagination/Pagination.container";
 import { v4 as uuidv4 } from "uuid";
 import InfiniteScroll from "react-infinite-scroller";
 import { useAuth } from "../../../../../commons/hooks/useAuth";
@@ -27,11 +22,6 @@ export default function MarketList(): JSX.Element {
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
   >(FETCH_USED_ITEMS);
-
-  // const { data: dataUseditemCount } = useQuery<
-  //   Pick<IQuery, "fetchUseditemsCountIBought">,
-  //   IQueryFetchUseditemsIBoughtArgs
-  // >(FETCH_USED_ITEMS_COUNT_IBOUGHT);
 
   const onClickToFinish = (event: MouseEvent<HTMLDivElement>): void => {
     if (event.target instanceof HTMLDivElement)
@@ -68,51 +58,45 @@ export default function MarketList(): JSX.Element {
   };
   return (
     <S.Wrapper>
-      {" "}
+      <S.SearchInput>
+        <S.Search
+          type="text"
+          onChange={onChangeSearch}
+          placeholder="검색어를 입력해주세요"
+        />
+      </S.SearchInput>
       <S.BoardList>
-        <S.BoardHeader>
-          <S.BoardHeaderId>ID</S.BoardHeaderId>
-          <S.BoardHeaderTitle>제목</S.BoardHeaderTitle>
-          <S.BoardHeaderWriter>작성자</S.BoardHeaderWriter>
-          <S.BoardHeaderDate>날짜</S.BoardHeaderDate>
-        </S.BoardHeader>
         <InfiniteScroll
           pageStart={0}
           loadMore={onLoadMore}
           hasMore={true}
-          useWindow={true}
+          useWindow={false}
+          style={{ display: "flex", flexWrap: "wrap" }}
         >
           {data?.fetchUseditems?.map((el) => (
             <S.BoardBody key={el._id}>
-              <S.BoardBodyId>{el._id.slice(-4)}</S.BoardBodyId>
+              <S.BoardBodyId>{el.name}</S.BoardBodyId>
+              <S.MarketBodyImage
+                src={`https://storage.googleapis.com/${el.images[0]}`}
+              ></S.MarketBodyImage>
               <S.BoardBodyTitle id={el._id} onClick={onClickToFinish}>
                 {el.remarks
-                  .slice(0, 25)
                   .replaceAll(keyword, `!@#${keyword}!@#`)
                   .split("!@#")
                   .map((el) => (
                     <span
                       key={uuidv4()}
-                      style={{ color: el === keyword ? "gray" : "black" }}
+                      style={{ fontWeight: el === keyword ? "Bold" : "" }}
                     >
                       {el}
                     </span>
                   ))}
               </S.BoardBodyTitle>
-              <S.BoardBodyWriter>{el._id?.slice(0, 4)}</S.BoardBodyWriter>
+
               <S.BoardBodyDate>{el.createdAt.slice(0, 10)}</S.BoardBodyDate>
             </S.BoardBody>
           ))}
         </InfiniteScroll>
-
-        <S.SearchInput>
-          <S.Search
-            type="text"
-            onChange={onChangeSearch}
-            placeholder="검색어를 입력해주세요"
-          />
-        </S.SearchInput>
-        {/* <Pagination refetch={refetch} count={count} /> */}
       </S.BoardList>{" "}
     </S.Wrapper>
   );

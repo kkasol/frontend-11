@@ -7,12 +7,7 @@ export const FETCH_USED_ITEMS = gql`
       name
       remarks
       createdAt
+      images
     }
-  }
-`;
-
-export const FETCH_USED_ITEMS_COUNT_IBOUGHT = gql`
-  query fetchUseditemsCountIBought {
-    fetchUseditemsCountIBought
   }
 `;

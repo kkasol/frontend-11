@@ -8,7 +8,7 @@ import {
 import { useRouter } from "next/router";
 import { useAuth } from "../../../../../commons/hooks/useAuth";
 // import MarketCommentWrite from "../MarketComment/CommentWrite/CommentWriteContainer";
-export const FETCH_USED_ITEM = gql`
+const FETCH_USED_ITEM = gql`
   query fetchUseditem($useditemId: ID!) {
     fetchUseditem(useditemId: $useditemId) {
       _id
@@ -18,6 +18,7 @@ export const FETCH_USED_ITEM = gql`
       price
       tags
       images
+      seller
       # pickedCount
       # useditemAddress
       createdAt
@@ -37,6 +38,15 @@ export default function MarketDetail() {
     },
   });
 
+  const onClickMoveToEdit = () => {
+    if (typeof router.query.useditemId !== "string") {
+      alert("시스템에 문제가 있습니다.");
+      return;
+    }
+
+    void router.push(`/market/${router.query.useditemId}/edit`);
+  };
+
   return (
     <>
       <S.Wrapper>
@@ -44,7 +54,7 @@ export default function MarketDetail() {
           <S.HeaderInfo>
             <S.SellerIcon src="/Vector.png"></S.SellerIcon>
             <S.SellerDate>
-              <S.Seller>{data?.fetchUseditem?._id.slice(0, 4)}</S.Seller>
+              <S.Seller>{data?.fetchUseditem?.seller}</S.Seller>
               <S.Date>{data?.fetchUseditem?.createdAt.slice(0, 10)}</S.Date>
             </S.SellerDate>
           </S.HeaderInfo>
@@ -65,12 +75,16 @@ export default function MarketDetail() {
               <S.Images key={el} src={`https://storage.googleapis.com/${el}`} />
             ))}
         </S.ImagesWrapper>
-        <S.Contents>{data?.fetchUseditem?.contents}</S.Contents>
+        <S.Contents
+          dangerouslySetInnerHTML={{
+            __html: data?.fetchUseditem?.contents,
+          }}
+        />
         <S.Tags>{data?.fetchUseditem?.tags}</S.Tags>
         <S.Maps></S.Maps>
         <S.BtnSection>
           <S.MoveToProductList>목록으로</S.MoveToProductList>
-          <S.ByuBtn>수정하기</S.ByuBtn>
+          <S.ByuBtn onClick={onClickMoveToEdit}>수정하기</S.ByuBtn>
         </S.BtnSection>
       </S.Wrapper>
       {/* <MarketCommentWrite /> */}

@@ -5,14 +5,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { UseFieldArrayReturn, useForm } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
 import { useAuth } from "../../../../../commons/hooks/useAuth";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Uploads01 from "../../../../../commons/uploads/01/Uploads01.container";
-import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import { IQuery } from "../../../../../commons/types/generated/types";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+import { Modal } from "antd";
+import { v4 as uuidv4 } from "uuid";
 
+const ReactQuill = dynamic(async () => await import("react-quill"), {
+  ssr: false,
+});
 interface IMarketWrite {
-  data?: Pick<IQuery, "fetchBoard">;
+  data?: Pick<IQuery, "fetchUseditem">;
+  isEdit: boolean;
 }
 
 interface IFormData {
@@ -32,11 +39,21 @@ const CREATE_USED_ITEM = gql`
     }
   }
 `;
+
+const UPDATE_USED_ITEM = gql`
+  mutation updateUseditem($updateUseditemInput: UpdateUseditemInput!) {
+    updateUseditem(updateUseditemInput: $updateUseditemInput) {
+      _id
+    }
+  }
+`;
+
 export default function MarketWrite(props: IMarketWrite): JSX.Element {
   const router = useRouter();
   const [fileUrls, setFileUrls] = useState(["", "", ""]);
   useAuth();
   const [createUseditem] = useMutation(CREATE_USED_ITEM);
+  console.log(fileUrls);
   const schema = yup.object({
     name: yup.string().required("작성자를 입력해주세요."),
     remarks: yup
@@ -52,11 +69,11 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
     // useditemAddress: yup
     images: yup.array().notRequired(),
   });
-
-  const { register, handleSubmit, formState } = useForm<IFormData>({
-    resolver: yupResolver(schema),
-    mode: "onChange",
-  });
+  const { register, handleSubmit, formState, setValue, trigger } =
+    useForm<IFormData>({
+      resolver: yupResolver(schema),
+      mode: "onChange",
+    });
   const onSubmit = async (data: IFormData) => {
     console.log(data);
     try {
@@ -68,32 +85,68 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
             contents: data.contents,
             price: Number(data.price),
             tags: data.tags,
-            // images: fileUrls,
-            images: fileUrls.filter((url) => url !== ""),
+            images: [...fileUrls],
           },
         },
       });
-      console.log(result);
 
+      console.log(result);
+      Modal.success({ content: "상품 등록에 성공했습니다." });
       router.push(`/market/${result.data?.createUseditem._id}`);
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
   };
-  const onChangeFileUrls = (
-    fileUrl: string,
-    index: number,
-    setFileUrls: Function
-  ): void => {
+
+  const onChangeFileUrls = (fileUrl: string, index: number): void => {
     const newFileUrls = [...fileUrls];
     newFileUrls[index] = fileUrl;
     setFileUrls(newFileUrls);
   };
-  console.log(fileUrls);
-  // useEffect(() => {
-  //   const images = props.data?.fetchBoard.images;
-  //   if (images !== undefined && images !== null) setFileUrls([...images]);
-  // }, [props.data]);
+  useEffect(() => {
+    const images = props.data?.fetchUseditem.images;
+    if (images !== undefined && images !== null) setFileUrls([...images]);
+  }, [props.data]);
+
+  const onChangeContents = (value: string) => {
+    setValue("contents", value === "<p><br></p>" ? "" : value);
+    trigger("contents");
+  };
+  // const onClickUpdate = async () : Promise<void> => {
+  //   const currentFiles = JSON.stringify(fileUrls);
+  //   const defaultFiles = JSON.stringify(props.data?.fetchUseditem.images);
+  //   const isChangedFiles = currentFiles !== defaultFiles;
+
+  //   const updateBoardInput: IUpdateBoardInput = {};
+  //   if (title !== "") updateBoardInput.title = title;
+  //   if (contents !== "") updateBoardInput.contents = contents;
+  //   if (youtubeUrl !== "") updateBoardInput.youtubeUrl = youtubeUrl;
+  //   if (zipcode !== "" || address !== "" || addressDetail !== "") {
+  //     updateBoardInput.boardAddress = {};
+  //     if (zipcode !== "") updateBoardInput.boardAddress.zipcode = zipcode;
+  //     if (address !== "") updateBoardInput.boardAddress.address = address;
+  //     if (addressDetail !== "")
+  //       updateBoardInput.boardAddress.addressDetail = addressDetail;
+  //   }
+  //     if (isChangedFiles) updateBoardInput.images = fileUrls;
+
+  //   try {
+  //     if (typeof router.query.boardId !== "string") {
+  //       alert("시스템에 문제가 있습니다.");
+  //       return;
+  //     }
+  //     const result = await updateBoard({
+  //       variables: {import { v4 as uuidv4 } from "uuid";
+
+  //     }
+
+  //     void router.push(`/boards/${result.data?.updateBoard._id}`);
+  //   } catch (error) {
+  //     if (error instanceof Error) alert(error.message);
+  //   }
+  // };
+  // }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <S.Wrapper>
@@ -107,7 +160,10 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
         <div style={{ color: "red" }}>{formState.errors.remarks?.message}</div>
 
         <S.Label>상품 설명</S.Label>
-        <Input01 type="text" register={register("contents")} />
+        <ReactQuill
+          onChange={onChangeContents}
+          style={{ height: "300px", marginBottom: "80px" }}
+        />
         <div style={{ color: "red" }}>{formState.errors.contents?.message}</div>
 
         <S.Label>판매 가격</S.Label>
@@ -121,30 +177,14 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
         <S.Label>거래 위치</S.Label>
         <S.Label>사진 첨부</S.Label>
         <S.ImageBox>
-          {/* {fileUrls.map((el, index) => (
-            <img key={index} src={el} alt="미리보기 이미지" />
-          ))} */}
-          <Uploads01
-            fileUrls={fileUrls}
-            onChangeFileUrls={(fileUrl: string, index: number) =>
-              onChangeFileUrls(fileUrl, index, setFileUrls)
-            }
-            index={0}
-          />
-          <Uploads01
-            fileUrls={fileUrls}
-            onChangeFileUrls={(fileUrl: string, index: number) =>
-              onChangeFileUrls(fileUrl, index, setFileUrls)
-            }
-            index={1}
-          />
-          <Uploads01
-            fileUrls={fileUrls}
-            onChangeFileUrls={(fileUrl: string, index: number) =>
-              onChangeFileUrls(fileUrl, index, setFileUrls)
-            }
-            index={2}
-          />
+          {fileUrls.map((el, index) => (
+            <Uploads01
+              key={uuidv4()}
+              index={index}
+              fileUrl={el}
+              onChangeFileUrls={onChangeFileUrls}
+            />
+          ))}
         </S.ImageBox>
         <S.Label>메인 사진 설정</S.Label>
 
