@@ -23,9 +23,11 @@ export default function MarketList(): JSX.Element {
     IQueryFetchUseditemsArgs
   >(FETCH_USED_ITEMS);
 
-  const onClickToFinish = (event: MouseEvent<HTMLDivElement>): void => {
+  const onClickToDetail = (event: MouseEvent<HTMLDivElement>): void => {
     if (event.target instanceof HTMLDivElement)
-      router.push(`./market/${event.target.id}`);
+      // router.push(`/market/${event.target._id}`);
+
+      console.log(event.target);
   };
   const getDebounce = _.debounce((value) => {
     void refetch({
@@ -56,6 +58,7 @@ export default function MarketList(): JSX.Element {
       },
     });
   };
+
   return (
     <S.Wrapper>
       <S.SearchInput>
@@ -74,12 +77,12 @@ export default function MarketList(): JSX.Element {
           style={{ display: "flex", flexWrap: "wrap" }}
         >
           {data?.fetchUseditems?.map((el) => (
-            <S.BoardBody key={el._id}>
+            <S.BoardBody key={el._id} onClick={onClickToDetail}>
               <S.BoardBodyId>{el.name}</S.BoardBodyId>
               <S.MarketBodyImage
                 src={`https://storage.googleapis.com/${el.images[0]}`}
               ></S.MarketBodyImage>
-              <S.BoardBodyTitle id={el._id} onClick={onClickToFinish}>
+              <S.BoardBodyTitle id={el._id}>
                 {el.remarks
                   .replaceAll(keyword, `!@#${keyword}!@#`)
                   .split("!@#")

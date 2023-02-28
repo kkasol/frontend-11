@@ -1,53 +1,47 @@
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import type { ChangeEvent, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import type {
   IMutation,
-  IMutationDeleteBoardCommentArgs,
-  IBoardComment,
+  IMutationDeleteUseditemQuestionArgs,
 } from "../../../../../../commons/types/generated/types";
 
 import {
-  DELETE_BOARD_COMMENT,
-  FETCH_BOARD_COMMENTS,
+  DELETE_USED_ITEM_QUESTION,
+  FETCH_USED_ITEM_QUESTIONS,
 } from "./CommentFinishQueries";
 import * as st from "./CommentFinishStyles";
 import { useRouter } from "next/router";
 import BoardCommentWrite from "../CommentWrite/CommentWriteContainer";
+import { IUseditemQuestion } from "../../../../../../../src/commons/types/generated/types";
 export interface IMarketCommentFinishUIItemProps {
-  el: IBoardComment;
+  el: IUseditemQuestion;
 }
 
-export default function ICommentFinishUIItem(
+export default function CommentFinishUIItem(
   props: IMarketCommentFinishUIItemProps
 ): JSX.Element {
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
-  const [password, setPassword] = useState("");
-
-  const [deleteBoardComment] = useMutation<
-    Pick<IMutation, "deleteBoardComment">,
-    IMutationDeleteBoardCommentArgs
-  >(DELETE_BOARD_COMMENT);
+  const [deleteUseditemQuestion] = useMutation<
+    Pick<IMutation, "deleteUseditemQuestion">,
+    IMutationDeleteUseditemQuestionArgs
+  >(DELETE_USED_ITEM_QUESTION);
 
   const onClickUpdate = (): void => {
     setIsEdit(true);
   };
-
-  const onClickDelete = async (
-    event: MouseEvent<HTMLButtonElement>
-  ): Promise<void> => {
+  const onClickDelete = async (event: MouseEvent<HTMLButtonElement>) => {
     try {
-      await deleteMarketComment({
+      await deleteUseditemQuestion({
         variables: {
-          password,
-          boardCommentId: props.el._id,
+          useditemQuestionId: props.el._id,
         },
         refetchQueries: [
           {
-            query: FETCH_BOARD_COMMENTS,
-            variables: { boardId: router.query.boardId },
+            query: FETCH_USED_ITEM_QUESTIONS,
+            variables: { useditemId: router.query.useditemId },
           },
         ],
       });
@@ -56,27 +50,14 @@ export default function ICommentFinishUIItem(
       if (error instanceof Error) alert(error.message);
     }
   };
-
   const onClickOpenDeleteModal = (
     event: MouseEvent<HTMLImageElement>
   ): void => {
     setIsOpenDeleteModal(true);
   };
 
-  const onChangeDeletePassword = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setPassword(event.target.value);
-  };
-
   return (
     <>
-      {isOpenDeleteModal && (
-        <st.PasswordModal visible={true} onOk={onClickDelete}>
-          <div>비밀번호 입력: </div>
-          <st.PasswordInput type="password" onChange={onChangeDeletePassword} />
-        </st.PasswordModal>
-      )}
       {!isEdit ? (
         <st.Wrapper>
           <st.Comment1 key={props.el._id}>
@@ -84,10 +65,6 @@ export default function ICommentFinishUIItem(
               <st.CommentRow>
                 <st.WriterImage src="/Vector.png" />
                 <st.RatingContents>
-                  <st.WriterRating>
-                    <st.CommentWriter>{props.el.writer}</st.CommentWriter>
-                    <st.Rating value={props.el.rating} disabled></st.Rating>
-                  </st.WriterRating>
                   <st.CommentContents>{props.el.contents}</st.CommentContents>
                 </st.RatingContents>
               </st.CommentRow>
@@ -100,7 +77,7 @@ export default function ICommentFinishUIItem(
               ></st.CommentUpdate>
               <st.CommentDelete
                 src="/x.png"
-                onClick={onClickOpenDeleteModal}
+                onClick={onClickDelete}
                 id={props.el._id}
               />
             </st.CommentEdit>

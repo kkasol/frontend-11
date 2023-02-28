@@ -28,6 +28,7 @@ export const BoardBody = styled.div`
   border-radius: 10px;
   padding: 20px;
   margin: auto;
+  cursor: pointer;
 `;
 export const BoardBodyId = styled.div`
   font-size: 20px;
@@ -41,7 +42,6 @@ export const MarketBodyImage = styled.img`
 export const BoardBodyTitle = styled.div`
   font-size: 16px;
   margin-bottom: 10px;
-  cursor: pointer;
 `;
 
 export const BoardBodyDate = styled.div`

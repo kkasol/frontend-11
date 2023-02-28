@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { Modal } from "antd";
+import DaumPostcode from "react-daum-postcode";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -68,3 +70,46 @@ export const SubmitBtn = styled.button`
   width: 120px;
   height: 40px; ;
 `;
+export const Search = styled.button`
+  :hover {
+    cursor: pointer;
+  }
+  :active {
+    background-color: gray;
+  }
+  background-color: black;
+  color: white;
+  width: 124px;
+  height: 52px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+`;
+export const MyInputMini = styled.input`
+  width: 77px;
+  margin-right: 15px;
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid #bdbdbd;
+`;
+
+export const AddressInput = styled.input`
+  width: 100%;
+  height: 52px;
+  margin-bottom: 10px;
+  border: 1px solid #bdbdbd;
+  font-size: 16px;
+`;
+export const PostSearch = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+  margin-right: 7px;
+`;
+
+export const AddressModal = styled(Modal)``;
+export const AddressSearchInput = styled(DaumPostcode)``;

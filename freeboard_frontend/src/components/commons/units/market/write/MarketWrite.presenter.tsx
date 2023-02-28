@@ -13,6 +13,9 @@ import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { Modal } from "antd";
 import { v4 as uuidv4 } from "uuid";
+import KakaoMapPage from "../../../../../commons/library/kakaomap";
+import DaumPostcodeEmbed from "react-daum-postcode";
+import type { Address } from "react-daum-postcode";
 
 const ReactQuill = dynamic(async () => await import("react-quill"), {
   ssr: false,
@@ -20,6 +23,8 @@ const ReactQuill = dynamic(async () => await import("react-quill"), {
 interface IMarketWrite {
   data?: Pick<IQuery, "fetchUseditem">;
   isEdit: boolean;
+  handleComplete: () => void;
+  isModalOpen: boolean;
 }
 
 interface IFormData {
@@ -28,8 +33,8 @@ interface IFormData {
   contents: string;
   price: string;
   tags: string;
-  // useditemAddress: string;
   fileUrls: UseFieldArrayReturn;
+  useditemAddress: string;
 }
 
 const CREATE_USED_ITEM = gql`
@@ -41,18 +46,28 @@ const CREATE_USED_ITEM = gql`
 `;
 
 const UPDATE_USED_ITEM = gql`
-  mutation updateUseditem($updateUseditemInput: UpdateUseditemInput!) {
-    updateUseditem(updateUseditemInput: $updateUseditemInput) {
+  mutation updateUseditem(
+    $updateUseditemInput: UpdateUseditemInput!
+    $useditemId: ID!
+  ) {
+    updateUseditem(
+      updateUseditemInput: $updateUseditemInput
+      useditemId: $useditemId
+    ) {
       _id
     }
   }
 `;
 
 export default function MarketWrite(props: IMarketWrite): JSX.Element {
-  const router = useRouter();
-  const [fileUrls, setFileUrls] = useState(["", "", ""]);
   useAuth();
+  const router = useRouter();
+  const [fileUrls, setFileUrls] = useState(["", ""]);
+  const [useditemAddress, setUseditemAddress] = useState("");
+  const [address, setAddress] = useState("");
   const [createUseditem] = useMutation(CREATE_USED_ITEM);
+  const [updateUseditem] = useMutation(UPDATE_USED_ITEM);
+  const [isOpen, setIsOpen] = useState(false);
   console.log(fileUrls);
   const schema = yup.object({
     name: yup.string().required("작성자를 입력해주세요."),
@@ -69,6 +84,7 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
     // useditemAddress: yup
     images: yup.array().notRequired(),
   });
+
   const { register, handleSubmit, formState, setValue, trigger } =
     useForm<IFormData>({
       resolver: yupResolver(schema),
@@ -90,9 +106,31 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
         },
       });
 
-      console.log(result);
       Modal.success({ content: "상품 등록에 성공했습니다." });
       router.push(`/market/${result.data?.createUseditem._id}`);
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
+    }
+  };
+  const onClickUpdate = async (data: IFormData) => {
+    try {
+      const result = await updateUseditem({
+        variables: {
+          updateUseditemInput: {
+            name: data.name,
+            remarks: data.remarks,
+            contents: data.contents,
+            price: Number(data.price),
+            tags: data.tags,
+            images: [...fileUrls],
+            useditemAddress: data.useditemAddress,
+          },
+          useditemId: router.query.useditemId,
+        },
+      });
+
+      Modal.success({ content: "상품 수정에 성공했습니다." });
+      router.push(`/market/${result.data?.updateUseditem._id}`);
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }
@@ -103,6 +141,7 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
     newFileUrls[index] = fileUrl;
     setFileUrls(newFileUrls);
   };
+
   useEffect(() => {
     const images = props.data?.fetchUseditem.images;
     if (images !== undefined && images !== null) setFileUrls([...images]);
@@ -112,45 +151,23 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
     setValue("contents", value === "<p><br></p>" ? "" : value);
     trigger("contents");
   };
-  // const onClickUpdate = async () : Promise<void> => {
-  //   const currentFiles = JSON.stringify(fileUrls);
-  //   const defaultFiles = JSON.stringify(props.data?.fetchUseditem.images);
-  //   const isChangedFiles = currentFiles !== defaultFiles;
-
-  //   const updateBoardInput: IUpdateBoardInput = {};
-  //   if (title !== "") updateBoardInput.title = title;
-  //   if (contents !== "") updateBoardInput.contents = contents;
-  //   if (youtubeUrl !== "") updateBoardInput.youtubeUrl = youtubeUrl;
-  //   if (zipcode !== "" || address !== "" || addressDetail !== "") {
-  //     updateBoardInput.boardAddress = {};
-  //     if (zipcode !== "") updateBoardInput.boardAddress.zipcode = zipcode;
-  //     if (address !== "") updateBoardInput.boardAddress.address = address;
-  //     if (addressDetail !== "")
-  //       updateBoardInput.boardAddress.addressDetail = addressDetail;
-  //   }
-  //     if (isChangedFiles) updateBoardInput.images = fileUrls;
-
-  //   try {
-  //     if (typeof router.query.boardId !== "string") {
-  //       alert("시스템에 문제가 있습니다.");
-  //       return;
-  //     }
-  //     const result = await updateBoard({
-  //       variables: {import { v4 as uuidv4 } from "uuid";
-
-  //     }
-
-  //     void router.push(`/boards/${result.data?.updateBoard._id}`);
-  //   } catch (error) {
-  //     if (error instanceof Error) alert(error.message);
-  //   }
-  // };
-  // }
-
+  const onClickAddressSearch = (): void => {
+    setIsOpen((prev) => !prev);
+  };
+  const onCompleteAddressSearch = (data: Address): void => {
+    setUseditemAddress(data.address);
+    setIsOpen((prev) => !prev);
+  };
+  console.log(useditemAddress);
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
+      {isOpen && (
+        <S.AddressModal visible={true}>
+          <S.AddressSearchInput onComplete={onCompleteAddressSearch} />
+        </S.AddressModal>
+      )}
       <S.Wrapper>
-        <S.Title>상품 등록하기</S.Title>
+        <S.Title>상품 {props.isEdit ? "수정하기" : "등록하기"}</S.Title>
         <S.Label>상품명</S.Label>
         <Input01 register={register("name")} />
         <div style={{ color: "red" }}>{formState.errors.name?.message}</div>
@@ -175,6 +192,34 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
         <div style={{ color: "red" }}>{formState.errors.tags?.message}</div>
 
         <S.Label>거래 위치</S.Label>
+        <S.Label>주소</S.Label>
+        <S.PostSearch>
+          <S.Search type="button" onClick={onClickAddressSearch}>
+            우편번호 검색
+          </S.Search>
+          {props.isModalOpen && (
+            <Modal title="주소 검색" open={true}>
+              {/* <DaumPostcodeEmbed onComplete={handleComplete} /> */}
+            </Modal>
+          )}
+        </S.PostSearch>
+        <S.AddressInput
+          readOnly
+          // value={
+          //   useditemAddress !== ""
+          //     ? useditemAddress
+          //     : props.data?.fetchUseditem.useditemAddress?.address ?? ""
+          // }
+          register={register("useditemAddress")}
+        />
+        {/* <S.AddressInput
+          type="text"
+          onChange={onChangeAddressDetail}
+          defaultValue={
+            props.data?.fetchUseditem.useditemAddress?.addressDetail ?? ""
+          }
+        /> */}
+        {/* <KakaoMapPage useditemAddress={useditemAddress} /> */}
         <S.Label>사진 첨부</S.Label>
         <S.ImageBox>
           {fileUrls.map((el, index) => (
@@ -199,7 +244,15 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
           </S.Picture2Section>
         </S.RadioSection>
         <S.BtnSection>
-          <S.SubmitBtn>등록하기</S.SubmitBtn>
+          <S.SubmitBtn
+            onClick={
+              props.isEdit
+                ? handleSubmit(onClickUpdate)
+                : handleSubmit(onSubmit)
+            }
+          >
+            {props.isEdit ? "수정하기" : "등록하기"}
+          </S.SubmitBtn>
         </S.BtnSection>
       </S.Wrapper>
     </form>

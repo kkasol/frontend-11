@@ -1,7 +1,8 @@
 import { withAuth } from "../../src/commons/hocs/withAuth";
+import MyPage from "../../src/components/commons/units/mypage/mypage.container";
 
-function MyPage() {
-  return <div>aaa</div>;
+function MyPagePage(): JSX.Element {
+  return <MyPage />;
 }
 
-export default withAuth(MyPage);
+export default withAuth(MyPagePage);
