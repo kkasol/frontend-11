@@ -1,11 +1,10 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "../../../../commons/stores";
 import type {
-  IQuery,
   IMutation,
   IMutationLoginUserArgs,
 } from "../../../../commons/types/generated/types";
@@ -38,6 +37,8 @@ export default function Login(): JSX.Element {
           password,
         },
       });
+      console.log(result);
+
       const accessToken = result.data?.loginUser.accessToken;
 
       if (accessToken === undefined) {

@@ -18,6 +18,7 @@ export default function MarketCommentFinish(): JSX.Element {
     variables: { useditemId: router.query.useditemId },
   });
 
+  console.log(data);
   const onLoadMore = (): void => {
     if (data === undefined) return;
 

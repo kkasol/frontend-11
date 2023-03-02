@@ -5,7 +5,7 @@ import { IBoardComment } from "../../../../../../commons/types/generated/types";
 export interface IBoardCommentWriteUIProps {
   onChangeContents: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onClickCommentSubmit: () => void;
-  onClickCommentUpdate: () => void;
+  onClickCommentUpdate: (event) => (useditemQuestionId) => void;
 
   contents: string;
   isEdit?: boolean;

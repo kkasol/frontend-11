@@ -1,8 +1,8 @@
 import * as S from "./login.styles";
-import { MouseEventHandler } from "react";
+import { ChangeEvent, MouseEventHandler } from "react";
 interface ILoginUIProps {
-  onChangeEmail: MouseEventHandler<HTMLInputElement>;
-  onChangePassword: MouseEventHandler<HTMLInputElement>;
+  onChangeEmail: (event: ChangeEvent<HTMLInputElement>) => void;
+  onChangePassword: (event: ChangeEvent<HTMLInputElement>) => void;
   onClickLogin: MouseEventHandler<HTMLButtonElement>;
 }
 export default function LoginUI(props: ILoginUIProps): JSX.Element {
@@ -13,12 +13,12 @@ export default function LoginUI(props: ILoginUIProps): JSX.Element {
         <S.TextInput
           type="text"
           placeholder="이메일을 입력해주세요"
-          onClick={props.onChangeEmail}
+          onChange={props.onChangeEmail}
         />
         <S.TextInput
           type="password"
           placeholder="비밀번호를 입력해주세요"
-          onClick={props.onChangePassword}
+          onChange={props.onChangePassword}
         />
       </S.InputWrapper>
       <span>로그인 상태 유지</span>

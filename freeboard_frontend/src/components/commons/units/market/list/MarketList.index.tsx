@@ -3,9 +3,10 @@ import { FETCH_USED_ITEMS } from "./MarketList.queries";
 import {
   IQuery,
   IQueryFetchUseditemsArgs,
+  IUseditem,
 } from "../../../../../commons/types/generated/types";
 import { useRouter } from "next/router";
-import type { MouseEvent, ChangeEvent } from "react";
+import { MouseEvent, ChangeEvent, useEffect } from "react";
 import { useState } from "react";
 import _ from "lodash";
 import * as S from "./MarketList.styles";
@@ -17,18 +18,35 @@ export default function MarketList(): JSX.Element {
   useAuth();
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
+  const [basketItems, setBasketItems] = useState([]);
 
   const { data, refetch, fetchMore } = useQuery<
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
   >(FETCH_USED_ITEMS);
 
-  const onClickToDetail = (event: MouseEvent<HTMLDivElement>): void => {
-    if (event.target instanceof HTMLDivElement)
-      // router.push(`/market/${event.target._id}`);
+  // 비회원 장바구니에 클릭한 게시글을 넣어주는 함수
+  const onClickBasket = (basket: IUseditem) => () => {
+    const baskets: IUseditem[] = JSON.parse(
+      localStorage.getItem("baskets") ?? "[]"
+    );
+    const temp = baskets.filter((el) => el._id === basket._id);
+    if (temp.length >= 1) {
+      alert("이미 담으신 물품입니다!!!");
+      return;
+    }
 
-      console.log(event.target);
+    baskets.push(basket);
+    localStorage.setItem("baskets", JSON.stringify(baskets));
   };
+
+  const onClickToDetail =
+    (event: MouseEvent<HTMLDivElement>) => (el: IUseditem) => {
+      if (event.target instanceof HTMLDivElement)
+        router.push(`/market/${event.target?.id}`);
+      onClickBasket(el);
+    };
+
   const getDebounce = _.debounce((value) => {
     void refetch({
       search: value,
@@ -36,7 +54,6 @@ export default function MarketList(): JSX.Element {
     });
     setKeyword(value);
   }, 500);
-
   const onChangeSearch = (event: ChangeEvent<HTMLInputElement>): void => {
     getDebounce(event.currentTarget.value);
   };
@@ -61,6 +78,12 @@ export default function MarketList(): JSX.Element {
 
   return (
     <S.Wrapper>
+      {basketItems.map((el: IUseditem) => (
+        <div key={el._id} style={{ backgroundColor: "red" }}>
+          <span>{el.name}</span>
+          <span>{el.remarks}</span>
+        </div>
+      ))}
       <S.SearchInput>
         <S.Search
           type="text"
@@ -73,11 +96,11 @@ export default function MarketList(): JSX.Element {
           pageStart={0}
           loadMore={onLoadMore}
           hasMore={true}
-          useWindow={false}
+          useWindow={true}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
           {data?.fetchUseditems?.map((el) => (
-            <S.BoardBody key={el._id} onClick={onClickToDetail}>
+            <S.BoardBody key={el._id} onClick={onClickToDetail(el)} id={el._id}>
               <S.BoardBodyId>{el.name}</S.BoardBodyId>
               <S.MarketBodyImage
                 src={`https://storage.googleapis.com/${el.images[0]}`}

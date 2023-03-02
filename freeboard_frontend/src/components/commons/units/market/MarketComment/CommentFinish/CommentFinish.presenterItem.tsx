@@ -74,6 +74,7 @@ export default function CommentFinishUIItem(
               <st.CommentUpdate
                 src="/edit.png"
                 onClick={onClickUpdate}
+                id={props.el._id}
               ></st.CommentUpdate>
               <st.CommentDelete
                 src="/x.png"
