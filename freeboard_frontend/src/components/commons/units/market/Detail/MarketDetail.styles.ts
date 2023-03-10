@@ -27,7 +27,6 @@ export const ProductName = styled.div`
   font-size: 23px;
   font-weight: 500;
 `;
-export const LikeIcon = styled.img``;
 export const Price = styled.div`
   font-size: 28px;
   font-weight: 700;
@@ -40,10 +39,34 @@ export const ImagesWrapper = styled.div`
   padding: 180px;
 `;
 export const Images = styled.img``;
-
+export const PickToggle = styled.button`
+  width: 18%;
+  margin-right: 10px;
+  height: 50px;
+  background-color: #c9c9c9;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+export const PickContents = styled.div`
+  font-size: 20px;
+`;
 export const Contents = styled.div``;
 export const Tags = styled.div``;
 export const Maps = styled.div``;
 export const BtnSection = styled.div``;
 export const MoveToProductList = styled.button``;
-export const ByuBtn = styled.button``;
+export const EditBtn = styled.button``;
+export const BuyBtn = styled.button`
+  width: 38%;
+  background-color: black;
+  color: white;
+`;
+export const Basket = styled.button`
+  width: 38%;
+  margin-right: 10px;
+  background-color: #a0a0a0;
+  color: white;
+`;

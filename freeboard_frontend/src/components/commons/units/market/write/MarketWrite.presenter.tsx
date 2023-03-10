@@ -64,11 +64,9 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
   const router = useRouter();
   const [fileUrls, setFileUrls] = useState(["", ""]);
   const [useditemAddress, setUseditemAddress] = useState("");
-  const [address, setAddress] = useState("");
   const [createUseditem] = useMutation(CREATE_USED_ITEM);
   const [updateUseditem] = useMutation(UPDATE_USED_ITEM);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(fileUrls);
   const schema = yup.object({
     name: yup.string().required("작성자를 입력해주세요."),
     remarks: yup
@@ -81,17 +79,16 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
       .required("가격을 입력해주세요.")
       .matches(/^[0-9]*$/, "숫자만 입력 가능합니다."),
     tags: yup.string().required("태그를 입력해주세요."),
-    // useditemAddress: yup
     images: yup.array().notRequired(),
   });
 
-  const { register, handleSubmit, formState, setValue, trigger } =
-    useForm<IFormData>({
-      resolver: yupResolver(schema),
-      mode: "onChange",
-    });
+  console.log(props.data);
+  const { register, handleSubmit, formState, setValue, trigger } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    defaultValues: props.data?.fetchUseditem,
+  });
   const onSubmit = async (data: IFormData) => {
-    console.log(data);
     try {
       const result = await createUseditem({
         variables: {
@@ -102,10 +99,12 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
             price: Number(data.price),
             tags: data.tags,
             images: [...fileUrls],
+            useditemAddress: {
+              address: useditemAddress,
+            },
           },
         },
       });
-
       Modal.success({ content: "상품 등록에 성공했습니다." });
       router.push(`/market/${result.data?.createUseditem._id}`);
     } catch (error) {
@@ -158,7 +157,6 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
     setUseditemAddress(data.address);
     setIsOpen((prev) => !prev);
   };
-  console.log(useditemAddress);
   return (
     <form>
       {isOpen && (
@@ -205,12 +203,12 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
         </S.PostSearch>
         <S.AddressInput
           readOnly
-          // value={
-          //   useditemAddress !== ""
-          //     ? useditemAddress
-          //     : props.data?.fetchUseditem.useditemAddress?.address ?? ""
-          // }
           register={register("useditemAddress")}
+          value={
+            props.data?.fetchUseditem.useditemAddress !== ""
+              ? props.data?.fetchUseditem.useditemAddress
+              : ""
+          }
         />
         {/* <S.AddressInput
           type="text"
@@ -219,7 +217,7 @@ export default function MarketWrite(props: IMarketWrite): JSX.Element {
             props.data?.fetchUseditem.useditemAddress?.addressDetail ?? ""
           }
         /> */}
-        {/* <KakaoMapPage useditemAddress={useditemAddress} /> */}
+        <KakaoMapPage useditemAddress={useditemAddress} />
         <S.Label>사진 첨부</S.Label>
         <S.ImageBox>
           {fileUrls.map((el, index) => (

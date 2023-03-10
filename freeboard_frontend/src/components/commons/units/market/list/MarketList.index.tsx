@@ -1,62 +1,54 @@
 import { useQuery } from "@apollo/client";
+
+import { useRouter } from "next/router";
+import { MouseEvent } from "react";
+import { useState } from "react";
+import _ from "lodash";
+import * as S from "./MarketList.styles";
+import InfiniteScroll from "react-infinite-scroller";
+
 import { FETCH_USED_ITEMS } from "./MarketList.queries";
+// import TodayItem from "../../../../common/layout/todayItem";
 import {
   IQuery,
   IQueryFetchUseditemsArgs,
   IUseditem,
 } from "../../../../../commons/types/generated/types";
-import { useRouter } from "next/router";
-import { MouseEvent, ChangeEvent, useEffect } from "react";
-import { useState } from "react";
-import _ from "lodash";
-import * as S from "./MarketList.styles";
-import { v4 as uuidv4 } from "uuid";
-import InfiniteScroll from "react-infinite-scroller";
-import { useAuth } from "../../../../../commons/hooks/useAuth";
 
 export default function MarketList(): JSX.Element {
-  useAuth();
   const router = useRouter();
-  const [keyword, setKeyword] = useState("");
-  const [basketItems, setBasketItems] = useState([]);
+  const [basketItems, setBasketItems] = useState<IUseditem[]>([]);
 
-  const { data, refetch, fetchMore } = useQuery<
+  const { data, fetchMore } = useQuery<
     Pick<IQuery, "fetchUseditems">,
     IQueryFetchUseditemsArgs
   >(FETCH_USED_ITEMS);
 
-  // 비회원 장바구니에 클릭한 게시글을 넣어주는 함수
-  const onClickBasket = (basket: IUseditem) => () => {
+  const onClickBasket = (basket: IUseditem) => {
     const baskets: IUseditem[] = JSON.parse(
       localStorage.getItem("baskets") ?? "[]"
     );
     const temp = baskets.filter((el) => el._id === basket._id);
     if (temp.length >= 1) {
-      alert("이미 담으신 물품입니다!!!");
       return;
     }
 
-    baskets.push(basket);
+    if (baskets.length >= 3) {
+      baskets.splice(0, 1);
+      baskets.push(basket);
+    } else {
+      baskets.push(basket);
+    }
     localStorage.setItem("baskets", JSON.stringify(baskets));
-  };
 
+    setBasketItems((prev) => [...prev, basket]);
+  };
   const onClickToDetail =
-    (event: MouseEvent<HTMLDivElement>) => (el: IUseditem) => {
-      if (event.target instanceof HTMLDivElement)
-        router.push(`/market/${event.target?.id}`);
+    (el: IUseditem) => (event: MouseEvent<HTMLDivElement>) => {
       onClickBasket(el);
+      router.push(`market/${event?.currentTarget?.id}`);
     };
 
-  const getDebounce = _.debounce((value) => {
-    void refetch({
-      search: value,
-      page: 1,
-    });
-    setKeyword(value);
-  }, 500);
-  const onChangeSearch = (event: ChangeEvent<HTMLInputElement>): void => {
-    getDebounce(event.currentTarget.value);
-  };
   const onLoadMore = (): void => {
     if (data === undefined) return;
 
@@ -75,22 +67,8 @@ export default function MarketList(): JSX.Element {
       },
     });
   };
-
   return (
     <S.Wrapper>
-      {basketItems.map((el: IUseditem) => (
-        <div key={el._id} style={{ backgroundColor: "red" }}>
-          <span>{el.name}</span>
-          <span>{el.remarks}</span>
-        </div>
-      ))}
-      <S.SearchInput>
-        <S.Search
-          type="text"
-          onChange={onChangeSearch}
-          placeholder="검색어를 입력해주세요"
-        />
-      </S.SearchInput>
       <S.BoardList>
         <InfiniteScroll
           pageStart={0}
@@ -100,26 +78,21 @@ export default function MarketList(): JSX.Element {
           style={{ display: "flex", flexWrap: "wrap" }}
         >
           {data?.fetchUseditems?.map((el) => (
-            <S.BoardBody key={el._id} onClick={onClickToDetail(el)} id={el._id}>
-              <S.BoardBodyId>{el.name}</S.BoardBodyId>
-              <S.MarketBodyImage
-                src={`https://storage.googleapis.com/${el.images[0]}`}
-              ></S.MarketBodyImage>
-              <S.BoardBodyTitle id={el._id}>
-                {el.remarks
-                  .replaceAll(keyword, `!@#${keyword}!@#`)
-                  .split("!@#")
-                  .map((el) => (
-                    <span
-                      key={uuidv4()}
-                      style={{ fontWeight: el === keyword ? "Bold" : "" }}
-                    >
-                      {el}
-                    </span>
-                  ))}
-              </S.BoardBodyTitle>
-
-              <S.BoardBodyDate>{el.createdAt.slice(0, 10)}</S.BoardBodyDate>
+            <S.BoardBody key={el._id} id={el._id} onClick={onClickToDetail(el)}>
+              {el.images[0] ? (
+                <S.MarketBodyImage
+                  src={`https://storage.googleapis.com/${el.images[0]}`}
+                />
+              ) : (
+                <S.MarketBodyImage src={`/basicImage.png`} />
+              )}
+              <S.MarketRow>
+                <S.MarketColumn>
+                  <S.BoardBodyId>{el.name}</S.BoardBodyId>
+                  <S.BoardBodyPrice>{el.price}원</S.BoardBodyPrice>
+                </S.MarketColumn>
+                <S.BoardBodyDate>{el.createdAt.slice(0, 10)}</S.BoardBodyDate>
+              </S.MarketRow>
             </S.BoardBody>
           ))}
         </InfiniteScroll>

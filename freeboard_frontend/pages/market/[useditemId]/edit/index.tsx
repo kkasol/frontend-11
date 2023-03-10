@@ -16,9 +16,10 @@ const FETCH_USED_ITEM = gql`
       price
       tags
       images
-      seller
       # pickedCount
-      # useditemAddress
+      useditemAddress {
+        address
+      }
       createdAt
     }
   }
@@ -32,7 +33,7 @@ export default function MarketEditPage() {
     IQueryFetchUseditemArgs
   >(FETCH_USED_ITEM, {
     variables: {
-      useditemId: `${router.query.useditemId}`,
+      useditemId: router.query.useditemId,
     },
   });
   return <MarketWrite isEdit={true} data={data} />;

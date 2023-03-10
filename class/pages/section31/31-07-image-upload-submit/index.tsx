@@ -82,7 +82,7 @@ export default function ImageUploadPage(): JSX.Element {
 
   return (
     <>
-      <input type="file" onChange={onChangeFile} />
+      <input type="file" onChange={wrapAsync(onChangeFile)} />
       <img src={imageUrl} />
       {/* <img src={`https://storage.googleapis.com/${imageUrl}`} /> */}
 

@@ -23,12 +23,12 @@ export default function CommentFinishUIItem(
 ): JSX.Element {
   const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
+  const [isAnswer, setIsAnswer] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
   const [deleteUseditemQuestion] = useMutation<
     Pick<IMutation, "deleteUseditemQuestion">,
     IMutationDeleteUseditemQuestionArgs
   >(DELETE_USED_ITEM_QUESTION);
-
   const onClickUpdate = (): void => {
     setIsEdit(true);
   };
@@ -56,6 +56,9 @@ export default function CommentFinishUIItem(
     setIsOpenDeleteModal(true);
   };
 
+  const onClickAnswer = (): void => {
+    setIsAnswer(true);
+  };
   return (
     <>
       {!isEdit ? (
@@ -75,12 +78,13 @@ export default function CommentFinishUIItem(
                 src="/edit.png"
                 onClick={onClickUpdate}
                 id={props.el._id}
-              ></st.CommentUpdate>
+              />
               <st.CommentDelete
                 src="/x.png"
                 onClick={onClickDelete}
                 id={props.el._id}
               />
+              <st.CommentAnswer onClick={onClickAnswer} id={props.el._id} />
             </st.CommentEdit>
           </st.Comment1>
           <st.Line />

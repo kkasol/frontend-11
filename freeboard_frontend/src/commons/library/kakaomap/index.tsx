@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 declare const window: typeof globalThis & {
   kakao: any;
@@ -9,65 +9,56 @@ interface IKakaoMapPageProps {
 }
 
 export default function KakaoMapPage(props: IKakaoMapPageProps) {
-  const [info, setInfo] = useState();
-  const [markers, setMarkers] = useState([]);
-  const [map, setMap] = useState();
-
   useEffect(() => {
-    if (!map) return;
-    const ps = new window.kakao.maps.services.Places();
+    const script = document.createElement("script");
+    script.src =
+      "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=714778af9f72faea8098b146c98d0b50&libraries=services&clusterer&drawing";
+    document.head.appendChild(script);
 
-    ps.keywordSearch("이태원 맛집", (data, status, _pagination) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-        // LatLngBounds 객체에 좌표를 추가합니다
-        const bounds = new window.kakao.maps.LatLngBounds();
-        let markers = [];
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        let mapContainer = document.getElementById("map"), // 지도를 표시할 div
+          mapOption = {
+            center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3, // 지도의 확대 레벨
+          };
 
-        for (var i = 0; i < data.length; i++) {
-          // @ts-ignore
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x,
-            },
-            content: data[i].place_name,
-          });
-          // @ts-ignore
-          bounds.extend(new window.kakao.maps.LatLng(data[i].y, data[i].x));
-        }
-        setMarkers(markers);
+        const map = new window.kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-        map.setBounds(bounds);
-      }
-    });
-  }, [map]);
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new window.kakao.maps.services.Geocoder();
 
-  return (
-    <Map // 로드뷰를 표시할 Container
-      center={{
-        lat: 37.566826,
-        lng: 126.9786567,
-      }}
-      style={{
-        width: "100%",
-        height: "350px",
-      }}
-      level={3}
-      onCreate={setMap}
-    >
-      {markers.map((marker) => (
-        <MapMarker
-          key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-          position={marker.position}
-          onClick={() => setInfo(marker)}
-        >
-          {info && info.content === marker.content && (
-            <div style={{ color: "#000" }}>{marker.content}</div>
-          )}
-        </MapMarker>
-      ))}
-    </Map>
-  );
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch(
+          props.useditemAddress,
+          function (result, status) {
+            // 정상적으로 검색이 완료됐으면
+            if (status === window.kakao.maps.services.Status.OK) {
+              var coords = new window.kakao.maps.LatLng(
+                result[0].y,
+                result[0].x
+              );
+
+              // 결과값으로 받은 위치를 마커로 표시합니다
+              var marker = new window.kakao.maps.Marker({
+                map: map,
+                position: coords,
+              });
+
+              // 인포윈도우로 장소에 대한 설명을 표시합니다
+              var infowindow = new window.kakao.maps.InfoWindow({
+                content: `<div style="width:150px;text-align:center;padding:6px 0;">${props.useditemAddress}</div>`,
+              });
+              infowindow.open(map, marker);
+
+              // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+              map.setCenter(coords);
+            }
+          }
+        );
+      });
+    };
+  }, [props.useditemAddress]);
+
+  return <div id="map" style={{ width: "605px", height: "280px" }}></div>;
 }

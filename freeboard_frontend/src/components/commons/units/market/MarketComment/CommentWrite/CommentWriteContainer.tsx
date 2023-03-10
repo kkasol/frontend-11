@@ -67,32 +67,31 @@ export default function MarketCommentWrite(
     }
     setContents("");
   };
-  const onClickCommentUpdate =
-    (useditemQuestionId: string) => async (event) => {
-      try {
-        const updateUseditemQuestionInput: IUpdateUseditemQuestionInput = {};
-        if (contents !== "") updateUseditemQuestionInput.contents = contents;
-        console.log(props.el);
+  const onClickCommentUpdate = async (event) => {
+    try {
+      const updateUseditemQuestionInput: IUpdateUseditemQuestionInput = {};
+      if (contents !== "") updateUseditemQuestionInput.contents = contents;
+      console.log(props.el);
 
-        await updateUseditemQuestion({
-          variables: {
-            updateUseditemQuestionInput,
-            useditemQuestionId: String(props.el?._id),
+      await updateUseditemQuestion({
+        variables: {
+          updateUseditemQuestionInput,
+          useditemQuestionId: props.el._id,
+        },
+
+        refetchQueries: [
+          {
+            query: FETCH_USED_ITEM_QUESTIONS,
+            variables: { useditemId: router.query.useditemId },
           },
+        ],
+      });
 
-          refetchQueries: [
-            {
-              query: FETCH_USED_ITEM_QUESTIONS,
-              variables: { useditemId: router.query.useditemId },
-            },
-          ],
-        });
-
-        props.setIsEdit?.(false);
-      } catch (error) {
-        if (error instanceof Error) alert(error.message);
-      }
-    };
+      props.setIsEdit?.(false);
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
+    }
+  };
 
   return (
     <BoardCommentWriteUI

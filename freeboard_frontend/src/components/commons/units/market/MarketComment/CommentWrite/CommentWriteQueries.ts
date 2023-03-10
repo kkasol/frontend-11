@@ -15,25 +15,15 @@ export const CREATE_USED_ITEM_QUESTION = gql`
 `;
 
 export const UPDATE_USED_ITEM_QUESTION = gql`
-  mutation updateUsedItemQuestion(
+  mutation updateUseditemQuestion(
     $updateUseditemQuestionInput: UpdateUseditemQuestionInput!
     $useditemQuestionId: ID!
   ) {
-    updateUsedItemQuestion(
+    updateUseditemQuestion(
       updateUseditemQuestionInput: $updateUseditemQuestionInput
       useditemQuestionId: $useditemQuestionId
     ) {
       _id
-    }
-  }
-`;
-
-export const FETCH_USER_LOGGED_IN = gql`
-  query fetchUserLoggedIn {
-    fetchUserLoggedIn {
-      _id
-      email
-      name
     }
   }
 `;

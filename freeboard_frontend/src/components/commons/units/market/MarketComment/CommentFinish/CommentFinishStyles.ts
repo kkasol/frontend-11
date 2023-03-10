@@ -78,9 +78,4 @@ export const Line = styled.div`
   margin: 20px 0px 20px 0px;
 `;
 
-export const PasswordModal = styled(Modal)``;
-
-export const PasswordInput = styled.input`
-  width: 100%;
-  margin-top: 10px;
-`;
+export const CommentAnswer = styled.button``;
